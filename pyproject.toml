@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "semeval-2027-task9-framing"
+version = "0.1.0"
+description = "Team code for SemEval 2027 Task 9 on multimodal news framing"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+train = [
+  "accelerate>=1.1,<2",
+  "iterative-stratification>=0.1.9,<1",
+  "numpy>=2,<3",
+  "pandas>=2.2,<3",
+  "scikit-learn>=1.5,<2",
+  "torch>=2.5,<3",
+  "transformers>=4.46,<5",
+]
+dev = [
+  "pytest>=8,<10",
+  "ruff>=0.8,<1",
+]
+
+[project.scripts]
+semeval-st1-summary = "semeval_framing.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+

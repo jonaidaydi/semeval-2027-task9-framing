@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Virtual environments and local configuration
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+
+# IDE and operating-system files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Official task data: download separately from Codabench
+data/raw/**
+data/processed/**
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Official starter kit: keep the downloaded copy local
+third_party/official-starter-kit/**
+!third_party/official-starter-kit/.gitkeep
+
+# Models, checkpoints, predictions and experiment trackers
+models/
+checkpoints/
+outputs/
+wandb/
+mlruns/
+*.safetensors
+*.ckpt
+*.pt
+*.pth
+pytorch_model.bin
+training_args.bin
+
+# Local scratch files
+tmp/
+scratch/
+

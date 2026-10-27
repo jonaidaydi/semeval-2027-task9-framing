@@ -1,0 +1,19 @@
+"""Official framing taxonomy shared by both subtasks."""
+
+FRAME_LABELS = (
+    "Economic",
+    "Capacity_and_resources",
+    "Morality",
+    "Fairness_and_equality",
+    "Legality_Constitutionality_and_jurisprudence",
+    "Policy_prescription_and_evaluation",
+    "Crime_and_punishment",
+    "Security_and_defense",
+    "Health_and_safety",
+    "Quality_of_life",
+    "Cultural_identity",
+    "Public_opinion",
+    "Political",
+    "External_regulation_and_reputation",
+)
+
