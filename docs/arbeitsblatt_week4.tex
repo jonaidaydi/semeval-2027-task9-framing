@@ -3,8 +3,10 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[ngerman]{babel}
-\usepackage{lmodern}
-\usepackage[left=2.45cm,right=2.45cm,top=1.9cm,bottom=1.9cm]{geometry}
+\usepackage{mathptmx}
+\usepackage{courier}
+\usepackage[left=2.6cm,right=2.6cm,top=2.1cm,bottom=1.9cm]{geometry}
+\usepackage[table]{xcolor}
 \usepackage{microtype}
 \usepackage{enumitem}
 \usepackage{tabularx}
@@ -12,164 +14,216 @@
 \usepackage{booktabs}
 \usepackage{amssymb}
 \usepackage{titlesec}
+\usepackage[hidelinks]{hyperref}
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{2pt}
-\setlist[itemize]{leftmargin=5mm,itemsep=0.8pt,topsep=2pt,parsep=0pt}
+\setlist[itemize]{leftmargin=3.8mm,labelsep=2mm,itemsep=3pt,topsep=4pt,parsep=0pt}
+\renewcommand{\normalsize}{\fontsize{9.5}{12}\selectfont}
 \pagestyle{plain}
 
 \titleformat{\section}
-  {\normalfont\large\bfseries}
+  {\normalfont\fontsize{14}{17}\selectfont\bfseries}
   {\thesection}
-  {0.9em}
+  {0.65em}
   {}
-\titlespacing*{\section}{0pt}{1.6ex plus 0.3ex minus 0.2ex}{0.6ex}
+  [{\vspace{2pt}\titlerule[0.35pt]}]
+\titlespacing*{\section}{0pt}{8pt}{4pt}
 
-\newcommand{\checkbox}{\(\square\)}
+\newcommand{\checkbox}{\fbox{\rule{0pt}{2.4mm}\hspace{2.4mm}}}
 \newcommand{\entryline}[2]{%
-  \textbf{#1}\hspace{1.5mm}\rule{#2}{0.35pt}%
+  \textbf{#1}\hspace{1.5mm}%
 }
 \newcommand{\writingline}{\rule{\linewidth}{0.35pt}}
+\newcommand{\planheading}[1]{\par\vspace{9pt}\textbf{#1}\par\vspace{3pt}}
+\newcommand{\repolink}[2]{\href{https://github.com/jonaidaydi/semeval-2027-task9-framing/blob/main/#1}{#2}}
+\newenvironment{startsteps}{\begin{enumerate}[leftmargin=12mm,label=\checkbox\hspace{2mm}\textbf{\arabic*.},labelsep=2mm,itemsep=7pt,parsep=2pt,topsep=4pt]}{\end{enumerate}}
+\newcommand{\followuptitle}[1]{%
+  {\small SemEval 2027 Task 9\hfill Woche 4\par}%
+  \vspace{6pt}%
+  {\fontsize{16}{19}\selectfont\bfseries #1\par}%
+  \vspace{8pt}%
+}
+% Light, separated rules keep the table cells visually distinct.
+\newcommand{\packagerule}{%
+  \arrayrulecolor{black!20}%
+  \cmidrule(lr){2-2}\cmidrule(lr){3-3}\cmidrule(l){4-4}%
+  \arrayrulecolor{black}%
+}
+\newcommand{\agendarule}{%
+  \arrayrulecolor{black!20}%
+  \cmidrule(r){1-1}\cmidrule(l){2-2}%
+  \arrayrulecolor{black}%
+}
 
 \begin{document}
+\normalsize
 
 \begin{center}
+  \vspace*{8pt}
   {\small SemEval 2027 Task 9: Analysis of Multimodal Framing in the News}\par
-  \vspace{0.7em}
-  {\LARGE\bfseries Arbeitsblatt für den Forschungsblock}\par
-  \vspace{0.35em}
-  {\large Week 4 -- 180 Minuten}\par
+  \vspace{1.5em}
+  {\fontsize{22}{26}\selectfont\bfseries Arbeitsblatt für den Forschungsblock}\par
+  \vspace{0.8em}
+  {\normalsize Heinrich-Heine-Universität Düsseldorf}\par
+  \vspace{0.3em}
+  {\large Woche 4}\par
 \end{center}
 
-\vspace{0.8em}
+\vspace{0pt}
+{\small
 \begin{tabularx}{\linewidth}{@{}X X r@{}}
+  \arrayrulecolor{gray}\toprule[0.4pt]
   \entryline{Name:}{4.2cm} &
   \entryline{Teamrolle:}{3.4cm} &
-  \textbf{Datum:} 3. November 2026
+  \textbf{Datum:} 03.11.2026 \\
+  \bottomrule[0.4pt]
 \end{tabularx}
+}
+\arrayrulecolor{black}
 
 \vspace{0.5em}
 
 \section{Grundidee}
 
 \begin{itemize}
-  \item Task 9, Subtask 1 ist eine \textbf{Multi-Label-Klassifikationsaufgabe}.
-  \item Jeder Absatz kann gleichzeitig mehrere der 14 Framing-Labels besitzen.
-  \item Das Modell gibt deshalb einen \textbf{14-dimensionalen binären Vektor} aus.
-  \item Beispiel: Der \texttt{Economic}-Klassifikator entscheidet für jeden Absatz:
-        \texttt{Economic} -- ja oder nein.
+  \item \textbf{Unser Einstieg: Subtask 1, Englisch.} Pro Absatz werden null, ein oder mehrere
+        der 14 Framing-Labels vorhergesagt. Kein Frame entspricht einem Nullvektor \hyperlink{quelle-task}{[1]}.
+  \item Framing bezeichnet die hervorgehobene Perspektive, nicht nur das Thema.
+        Beispiel: \texttt{Economic} fragt nach wirtschaftlichen Aspekten (ja oder nein).
+  \item Ein Sigmoid-Modell liefert zunächst 14 Werte zwischen 0 und 1.
+        Schwellen erzeugen den \textbf{binären 14-dimensionalen Vektor}, kein Softmax mit nur einem Gewinner.
 \end{itemize}
 
 \section{Mögliche Baselines}
 
 \begin{itemize}
-  \item Einfache regel- oder häufigkeitsbasierte Baseline.
-  \item Ein gemeinsames Modell mit 14 Ausgabewerten und Sigmoid-Aktivierung.
-  \item Alternativ 14 unabhängige binäre Klassifikatoren -- einer pro Label.
-  \item Das direkte Lernen vollständiger Labelkombinationen ist wahrscheinlich
-        ungünstig, weil viele Kombinationen selten sind oder erst im Testset auftreten.
+  \item \textbf{Startvorschlag: TF-IDF + 14 binäre logistische Regressionen}, eine pro Label.
+        TF-IDF beschreibt Texte über gewichtete Worthäufigkeiten. Zusätzlich eine konstante Referenz testen.
+  \item Vergleichsmodell: gemeinsamer Textencoder mit 14 Sigmoid-Ausgängen und binärer
+        Kreuzentropie pro Label. Ob es besser ist, entscheidet die Evaluation.
+  \item Ein gemeinsames 14-Output-Modell ist \emph{nicht} dasselbe wie eine eigene Klasse je
+        Labelkombination (Label Powerset). Seltene Kombinationen erschweren letzteren Ansatz.
 \end{itemize}
 
 \section{Embedding-basierter Ansatz}
 
 \begin{itemize}
-  \item Alle beispielsweise mit \texttt{Political} annotierten Absätze in Embeddings umwandeln.
-  \item Embeddings clustern, um typische Untergruppen oder Bedeutungsvarianten zu finden.
-  \item Pro Label einen oder mehrere Repräsentanten beziehungsweise Cluster-Zentren bilden.
-  \item Neue Texte über ihre Kosinusähnlichkeit zu diesen Label-Repräsentanten klassifizieren.
-  \item Ergebnis: eine einfache Nearest-Prototype-Baseline als Vergleich zum trainierten Modell.
+  \item Trainingsabsätze mit einem vortrainierten Embedding-Modell in Vektoren umwandeln.
+        Zunächst etwa die mit \texttt{Political} annotierten Beispiele untersuchen.
+  \item Pro Label einen Mittelwert-Prototyp bilden. Optional innerhalb des Labels clustern
+        und mehrere Repräsentanten vergleichen. Vektoren für den Kosinusvergleich normieren.
+  \item Für jeden neuen Absatz \emph{jedes} Label anhand seiner Prototypen prüfen.
+        Eine auf Validierungsdaten gewählte Schwelle erlaubt mehrere oder keine Labels.
 \end{itemize}
 
-\section{Synthetische Trainingsdaten}
+\section{Erweiterung: Synthetische Trainingsdaten}
 
 \begin{itemize}
-  \item Sprachmodelle können zusätzliche Beispieltexte für seltene Labels generieren.
-  \item Pro Label gezielt positive und schwierige negative Beispiele erzeugen.
-  \item Synthetische Daten nur ergänzend im Training verwenden; echte Daten bleiben der Maßstab.
-  \item Evaluation ausschließlich auf echten, unveränderten Daten durchführen.
-  \item Generierte Beispiele stichprobenartig auf Labelqualität und Datenlecks prüfen.
+  \item Erst nach der echten Baseline: zusätzliche Trainingsbeispiele oder Prototypen testen,
+        insbesondere für seltene Labels. Labelqualität und Wettbewerbsvorgaben prüfen.
+  \item Synthetische Beispiele getrennt kennzeichnen und keine Testdaten zur Generierung nutzen.
+        Nutzen auf denselben echten, zurückgehaltenen Daten messen, nicht auf künstlichen Testbelegen.
 \end{itemize}
 
-\section{Bilder in Text übersetzen}
+\section{Erweiterung: Bilder in Text übersetzen}
 
 \begin{itemize}
-  \item Ein Vision-Language-Modell beschreibt jedes Nachrichtenbild als Text beziehungsweise Caption.
-  \item Optional OCR ergänzen, um sichtbare Schrift, Schilder oder Bildunterschriften zu erfassen.
-  \item Bildbeschreibung und Artikelkontext werden anschließend wie normaler Text verarbeitet.
-  \item Der Textklassifikator gibt wieder einen 14-dimensionalen Framing-Vektor aus.
+  \item Pipeline-Idee: Bild $\rightarrow$ Beschreibung durch ein Vision-Language-Modell,
+        optional OCR $\rightarrow$ Klassifikation. Artikeltext kann als Kontext hinzukommen.
+  \item Ziel von Subtask 2 sind die \textbf{Frames des Bildes}, nicht einfach die des Artikels.
+        Variante 2a nutzt keine Gold-Textlabels, 2b stellt sie bereit \hyperlink{quelle-task}{[1]}.
+  \item Beschreibungen auf Auslassungen und erfundene Details prüfen. Caption allein und
+        Caption mit Artikelkontext vergleichen und die Übertragung des Textmodells gesondert evaluieren.
 \end{itemize}
 
-\vfill
+\vspace{5pt}
 \begin{quote}
+  \centering
   \itshape
-  Leitfrage für heute: Welche einfache, nachvollziehbare Pipeline liefert uns zuerst
-  eine reproduzierbare Vergleichsbasis -- und welche konkrete Verbesserung testen wir danach?
+  Leitfrage: Welche einfache Pipeline liefert zuerst eine belastbare Vergleichsbasis?
+  Für alle Versuche gelten derselbe dokumentweise Split und das Evaluationsprotokoll auf Seite 3.
+  \par
 \end{quote}
 
 \newpage
 
-\begin{center}
-  {\small SemEval 2027 Task 9}\par
-  \vspace{0.5em}
-  {\LARGE\bfseries Hauptaufgaben und Aufgaben für heute}\par
-  \vspace{0.25em}
-  {\large Week 4}\par
-\end{center}
+\titleformat{\section}
+  {\normalfont\fontsize{14}{17}\selectfont\bfseries}
+  {\thesection}
+  {0.65em}
+  {}
+\titlespacing*{\section}{0pt}{10pt}{6pt}
+\renewcommand{\writingline}{{\color{black!40}\rule{\linewidth}{0.3pt}}}
 
-\vspace{0.7em}
-\begin{tabularx}{\linewidth}{@{}X X r@{}}
+\followuptitle{Hauptaufgaben und Aufgaben für heute}
+
+\vspace{0.3em}
+{\small
+\begin{tabularx}{\linewidth}{@{}p{4.2cm} X r@{}}
+  \arrayrulecolor{gray}\toprule[0.4pt]
   \entryline{Name:}{4.2cm} &
   \entryline{Arbeitspaket:}{3.0cm} &
-  \textbf{Arbeitszeit:} 180 Minuten
+  \textbf{Datum:} 03.11.2026 \\
+  \bottomrule[0.4pt]
 \end{tabularx}
+}
+\arrayrulecolor{black}
 
+\renewcommand{\theHsection}{work.\arabic{section}}
+\setcounter{section}{0}
 \section{Fünf Arbeitspakete}
 
 Jede Person übernimmt ein Arbeitspaket und dokumentiert ein überprüfbares Ergebnis.
 
 \vspace{0.35em}
 \small
-\renewcommand{\arraystretch}{1.16}
-\begin{tabularx}{\linewidth}{@{}>{\centering\arraybackslash}p{0.65cm} >{\bfseries\raggedright\arraybackslash}p{2.75cm} X >{\raggedright\arraybackslash}p{3.85cm}@{}}
+
+\begin{tabularx}{\linewidth}{@{}>{\centering\arraybackslash}p{0.95cm} >{\bfseries\raggedright\arraybackslash}p{2.75cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{3.55cm}@{}}
 \toprule
- & Arbeitspaket & Auftrag für heute & Ergebnis nach 180 Minuten \\
+ & Arbeitspaket & Auftrag für heute & Angestrebtes Ergebnis \\
 \midrule
-\checkbox & Literatur und Hypothesen &
-3--5 Arbeiten zu Multi-Label-Klassifikation oder Framing Detection finden und ihre Methoden vergleichen. &
-Quellenliste und zwei testbare Hypothesen. \\
-\addlinespace
-\checkbox & Daten und Labels &
-Englische Daten prüfen: Labelverteilung, Kein-Frame-Anteil, Multi-Label-Anteil und auffällige Datenprobleme. &
-Kurze Statistik und drei Beobachtungen. \\
-\addlinespace
-\checkbox & Text-Baseline &
-14-Output-Modell und 14 binäre Klassifikatoren vergleichen; kleinsten reproduzierbaren Versuch planen oder starten. &
-Pipeline, Parameter und erster Laufplan. \\
-\addlinespace
-\checkbox & Embeddings und Synthese &
-Embedding-/Kosinus-Baseline entwerfen; Clustering und synthetische Beispiele für seltene Labels prüfen. &
-Versuchsdesign mit Modellwahl und Risiken. \\
-\addlinespace
-\checkbox & Bild-zu-Text und Evaluation &
-Captioning-/OCR-Pipeline für Subtask 2 skizzieren und Varianten für Bild, Caption und Artikelkontext definieren. &
-Pipeline-Diagramm und Vergleichsbaselines. \\
+\checkbox & \hyperlink{plan-literatur}{Literatur und Hypothesen} &
+Zwei bis drei relevante Arbeiten lesen, Labeldefinitionen und Methoden vergleichen. Mit Card et al. \hyperlink{quelle-card}{[2]} beginnen. &
+Quellen mit Kernaussage und zwei testbare Hypothesen. \\
+\packagerule
+\checkbox & \hyperlink{plan-daten}{Daten und Labels} &
+Labelhäufigkeiten, Kein-Frame-Fälle und Dubletten prüfen. Gemeinsamen dokumentweisen Split festlegen. &
+Statistik, Labelreihenfolge und gespeicherte Split-IDs. \\
+\packagerule
+\checkbox & \hyperlink{plan-text}{Text-Baseline} &
+TF-IDF + 14 binäre logistische Regressionen auf dem gemeinsamen Split starten. Konstante Referenz ergänzen. &
+Startbefehl, Konfiguration und erste Vorhersagen. \\
+\packagerule
+\checkbox & \hyperlink{plan-embeddings}{Embeddings und Prototypen} &
+Vortrainiertes Modell wählen, Trainingsprototypen und Kosinus-Schwellen testen. Clustering optional. &
+Modellname, Schwellenregel und erste Vorhersagen. \\
+\packagerule
+\checkbox & \hyperlink{plan-evaluation}{Evaluation und Fehleranalyse} &
+Offiziellen Scorer und Ausgabeformat prüfen, Baselines vergleichen und Fehlertypen sammeln. &
+Micro-/Macro-F1, drei Fehlerbeispiele, Bildpipeline als Ausblick. \\
 \bottomrule
 \end{tabularx}
 \normalsize
 
-\section{Zeitplan für die 180 Minuten}
+\section{Agenda}
 
 \small
-\begin{tabularx}{\linewidth}{@{}>{\bfseries}p{2.0cm} X p{4.7cm}@{}}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{6cm}@{}}
 \toprule
-Zeit & Tätigkeit & Erwartetes Zwischenergebnis \\
+\textbf{Tätigkeit} & \textbf{Erwartetes Zwischenergebnis} \\
 \midrule
-0--15 Min. & Gemeinsamer Start: Ziel, Datenstand und Pakete klären. & Paket und Leitfrage eintragen. \\
-15--30 Min. & Forschungsfrage und erwartetes Ergebnis festlegen. & Hypothese oder Entscheidungskriterium. \\
-30--105 Min. & Recherche, Analyse oder erster technischer Versuch. & Quellen, Notizen, Code oder Statistik. \\
-105--135 Min. & Ergebnis verdichten und überprüfbar dokumentieren. & Ein teilbares Artefakt vorbereiten. \\
-135--165 Min. & Kurzberichte: pro Person maximal sechs Minuten. & Ergebnis, Problem und Empfehlung. \\
-165--180 Min. & Gemeinsame Entscheidungen und nächste Schritte. & Zuständigkeit und nächster Termin. \\
+Gemeinsamer Start: Daten, Split und Pakete klären. & Gemeinsame Vergleichsbasis festhalten. \\
+\agendarule
+Forschungsfrage und erwartetes Ergebnis festlegen. & Hypothese oder Entscheidungskriterium. \\
+\agendarule
+Recherche, Analyse oder erster technischer Versuch. & Quellen, Notizen, Code oder Statistik. \\
+\agendarule
+Ergebnis anhand des gemeinsamen Protokolls prüfen. & Artefakt, Konfiguration und Evidenz. \\
+\agendarule
+Ergebnisse im Team vorstellen und diskutieren. & Ergebnis, Problem und Empfehlung. \\
+\agendarule
+Gemeinsame Entscheidungen und nächste Schritte. & Zuständigkeit und nächster Termin. \\
 \bottomrule
 \end{tabularx}
 \normalsize
@@ -177,24 +231,429 @@ Zeit & Tätigkeit & Erwartetes Zwischenergebnis \\
 \section{Meine Dokumentation}
 
 \textbf{Meine konkrete Forschungsfrage oder Hypothese:}\par
-\vspace{0.3em}\writingline\par\vspace{0.8em}
+\vspace{4mm}\writingline\par\vspace{2mm}
 
 \begin{tabularx}{\linewidth}{@{}X X@{}}
 \textbf{Wichtigste Erkenntnisse / Evidenz:} & \textbf{Probleme / offene Fragen:} \\
-\vspace{9mm} & \vspace{9mm} \\
-\midrule
+\rule{0pt}{10mm} & \rule{0pt}{10mm} \\
+\arrayrulecolor{black!40}\cmidrule(r){1-1}\cmidrule(l){2-2}
 \end{tabularx}
+\arrayrulecolor{black}
 
-\vspace{0.5em}
+\vspace{2mm}
 \textbf{Mein konkretes Ergebnis (Link, Datei, Statistik, Pipeline oder Literaturübersicht):}\par
-\vspace{0.3em}\writingline\par\vspace{0.8em}
+\vspace{4mm}\writingline\par\vspace{2mm}
 
 \textbf{Meine Empfehlung an das Team:}\par
-\vspace{0.3em}\writingline\par\vspace{0.8em}
+\vspace{4mm}\writingline\par\vspace{2mm}
 
 \small
 \checkbox\ Ergebnis vorgestellt \hfill
 \checkbox\ Artefakt abgelegt \hfill
 \checkbox\ Nächsten Schritt und Zuständigkeit festgelegt
+
+\newpage
+\followuptitle{Referenz und Evaluationsprotokoll}
+\normalsize
+\renewcommand{\theHsection}{reference.\arabic{section}}
+\setcounter{section}{0}
+\section{Die 14 Framing-Labels}
+Die hervorgehobene Perspektiven sind Beispiele für die 14 Framing-Labels.
+Mehrere Perspektiven können gleichzeitig vorliegen. Ein Stichwort allein genügt nicht.
+Für Grenzfälle gelten die offiziellen Richtlinien und Beispiele [\hyperlink{quelle-task}{1}, \hyperlink{quelle-card}{2}].
+
+\small
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{6.2cm} >{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Label (Lesefassung)} & \textbf{Hervorgehobene Perspektive} \\
+\midrule
+Capacity and resources & Verfügbare Mittel, Personal und Handlungskapazität. \\
+\agendarule
+Crime and punishment & Straftaten, Strafverfolgung und Bestrafung. \\
+\agendarule
+Cultural identity & Traditionen, kulturelle Werte und Zugehörigkeit. \\
+\agendarule
+Economic & Kosten, Nutzen und wirtschaftliche Auswirkungen. \\
+\agendarule
+External regulation and reputation & Internationale Regeln, Beziehungen und Ansehen. \\
+\agendarule
+Fairness and equality & Gerechtigkeit und Verteilung von Rechten oder Lasten. \\
+\agendarule
+Health and safety & Gesundheit und körperliche Unversehrtheit. \\
+\agendarule
+Legality, constitutionality and jurisprudence & Rechtslage, Verfassung und gerichtliche Auslegung. \\
+\agendarule
+Morality & Moralische oder religiöse Maßstäbe und Pflichten. \\
+\agendarule
+Policy prescription and evaluation & Maßnahmen, Lösungsvorschläge und ihre Bewertung. \\
+\agendarule
+Political & Politischer Wettbewerb, Macht und Parteistrategien. \\
+\agendarule
+Public opinion & Öffentliche Einstellungen und gesellschaftliche Zustimmung. \\
+\agendarule
+Quality of life & Wohlergehen und alltägliche Lebensbedingungen. \\
+\agendarule
+Security and defense & Schutz vor Bedrohungen, Sicherheit und Verteidigung. \\
+\bottomrule
+\end{tabularx}
+\normalsize
+{\footnotesize Lesefassung mit korrigiertem \glqq resources\grqq{}. Im Code exakt die Label-IDs
+des Starter-Kits verwenden. \glqq Kein Frame\grqq{} ist kein zusätzliches inhaltliches Frame-Label.}
+
+\section{Gemeinsamer Versuchsstandard}
+\begin{itemize}[itemsep=2pt,topsep=2pt]
+  \item \textbf{Split:} Alle Absätze eines Artikels bleiben zusammen. Train-/Validation-IDs
+        und Zufallsseed speichern. Identische oder nahezu identische Artikel auf Datenlecks prüfen.
+  \item \textbf{Training:} TF-IDF nur auf Training fitten und Prototypen nur daraus bilden.
+        Vortrainierte Encoder sind erlaubt, sofern Daten- und Wettbewerbsregeln dies zulassen.
+  \item \textbf{Auswahl:} Modelle und Schwellen nur mit Validation auswählen. Testdaten bleiben
+        unangetastet. Validierungsergebnisse als solche kennzeichnen, nicht als unabhängigen Test.
+  \item \textbf{Messung:} Offiziellen Scorer nutzen: Micro-F1 primär, Macro-F1 ergänzend \hyperlink{quelle-task}{[1]}.
+        Dessen \texttt{None}-Behandlung prüfen und Nullvektoren nicht unbemerkt ausschließen.
+  \item \textbf{Nachweis:} Datenversion, Split, Modell, Parameter, Schwellen und Startbefehl
+        dokumentieren und pro Label Fehler ansehen. Dokument-ID und Absatz-Offsets für die Ausgabe erhalten.
+\end{itemize}
+
+\section{Methodische Einordnung}
+\begin{itemize}[itemsep=3pt,topsep=2pt]
+  \item Die Prototypen-Baseline benötigt kein zusätzliches Klassifikatortraining, ist aber
+        nicht modellfrei. Ein vortrainiertes Embedding-Modell erzeugt die Vektoren.
+  \item Bei synthetischen Daten erzeugt ein Sprachmodell Beispieltexte. Das Embedding-Modell
+        berechnet deren Vektoren. Das ist noch kein Training eines eigenen Embedding-Modells.
+\end{itemize}
+
+\newpage
+\normalsize
+\hypertarget{plan-literatur}{}
+\followuptitle{Paket 1: Literatur und Hypothesen}
+\textbf{Ziel heute:} Zwei nachvollziehbare Hypothesen, die unser Team mit den Baselines testen kann.
+Du musst heute weder ein Modell trainieren noch die gesamte Literatur abdecken.
+
+\planheading{Startpunkt und Voraussetzungen}
+Browser und Zugriff auf die unten verlinkten Texte reichen. Starte unabhängig von den Trainingsdaten.
+Alle neuen Ablagepfade auf diesen Anleitungsseiten sind \textbf{Vorschläge, die heute anzulegen sind}.
+Relative Pfade beziehen sich immer auf den Stammordner des Repositorys.
+
+\planheading{Jetzt starten: Schritt für Schritt}
+\begin{startsteps}
+  \item \textbf{Aufgabe eingrenzen.}
+    Öffne die \href{https://propaganda.math.unipd.it/semeval2027task9/index.html}{offizielle Task-Beschreibung}.
+    Notiere Eingabe, Ziel und Auswertung für Subtask 1. Halte fest, welche Ideen nur Subtask 2 betreffen.
+  \item \textbf{Labels verstehen.}
+    Lies in \href{https://aclanthology.org/P15-2072/}{Card et al. (2015)} die Beschreibung der Frame-Taxonomie.
+    Wähle drei leicht verwechselbare Labels. Erkläre ihren Unterschied mit eigenen kurzen Beispielen.
+    Kennzeichne selbst formulierte Beispiele als Illustration, nicht als Gold-Annotation.
+  \item \textbf{Eine zweite Arbeit vergleichen.}
+    Öffne \href{https://aclanthology.org/2023.semeval-1.317/}{SemEval-2023 Task 3}.
+    Konzentriere dich auf Framing. Notiere Unterschiede zu unserer Absatzaufgabe,
+    insbesondere Vorhersageeinheit, Daten, Baselines und Metriken. Übertrage Resultate nicht ungeprüft.
+  \item \textbf{Eine kleine Vergleichstabelle schreiben.}
+    Pro Arbeit: Quelle mit Link, Forschungsfrage, Methode, Daten, Evaluation,
+    eine Stärke, eine Grenze und eine konkrete Idee für unser Projekt. Belege Aussagen mit Abschnitt oder Seite.
+  \item \textbf{Zwei testbare Hypothesen ableiten.}
+    Form: \glqq Wenn wir X gegenüber Baseline Y ändern, erwarten wir Z in Metrik M,
+    weil \ldots\grqq{}. Beispiel: Ein Prototypenmodell erkennt paraphrasierte Frames besser als TF-IDF.
+    Das ist eine Hypothese, kein vorweggenommenes Ergebnis.
+  \item \textbf{An das Team übergeben.}
+    Besprich mit Paket 3 und 4, welche Hypothese mit den heutigen Mitteln testbar ist.
+    Gib Paket 5 die drei Labelabgrenzungen als Prüffragen für die Fehleranalyse.
+\end{startsteps}
+
+\planheading{Ergebnis ablegen}
+\texttt{docs/week4/literatur.md}: Vergleich von mindestens zwei Arbeiten, klickbare Quellen,
+zwei Hypothesen und drei Labelabgrenzungen. Eine dritte Arbeit ist optional.
+
+\planheading{Fertig, wenn}
+\checkbox\ Zwei Arbeiten mit Fundstellen ausgewertet.\par
+\checkbox\ Jede Hypothese nennt Baseline, Änderung und Messgröße.\par
+\checkbox\ Eine konkrete Empfehlung wurde an die Modellpakete übergeben.
+
+\planheading{Falls du blockiert bist}
+Wenn ein Volltext fehlt, nutze den PDF-Link auf der ACL-Seite oder zunächst den anderen Text.
+Markiere reine Abstract-Aussagen als vorläufig. Ohne Daten kannst du die Literaturübersicht vollständig erstellen.
+
+\vfill
+\textit{Optional danach: Literatur zu Label-Prototypen oder synthetischen Trainingsdaten suchen.
+Nicht zusätzlich einen eigenen Modellansatz implementieren.}
+
+\newpage
+\hypertarget{plan-daten}{}
+\followuptitle{Paket 2: Daten, Labels und gemeinsamer Split}
+\textbf{Ziel heute:} Eine geprüfte englische Datenbasis und ein fester Split, den Paket 3, 4 und 5 identisch nutzen.
+
+\planheading{Vorhanden und noch zu bauen}
+Vorhanden: \repolink{src/semeval_framing/data.py}{Loader},
+\repolink{src/semeval_framing/labels.py}{Labelreihenfolge},
+\repolink{src/semeval_framing/cli.py}{Statistikbefehl} und
+\repolink{tests/test_data.py}{fünf Loader-Tests}.
+\textbf{Noch zu implementieren:} Auswahl der Datenquellen und Export des dokumentweisen Splits.
+
+\planheading{Jetzt starten: Schritt für Schritt}
+\begin{startsteps}
+  \item \textbf{Datenzugang klären.}
+    Folge \repolink{data/README.md}{data/README.md}. Lade nur über euren autorisierten Zugang herunter.
+    Prüfe, welche englischen 2027-Dateien tatsächlich vorliegen. Ältere 2023-Daten bleiben zunächst getrennt.
+    Der Loader filtert Sprache und Jahr \emph{nicht} automatisch.
+  \item \textbf{Loader prüfen.}
+    Im Repository-Stammordner in PowerShell ausführen. Voraussetzung ist Python ab 3.11.
+    Der Loader benötigt keine zusätzlichen Pakete.
+\begin{verbatim}
+$env:PYTHONPATH = "src"
+python -m unittest discover -s tests -v
+python -m semeval_framing.cli --help
+\end{verbatim}
+    Danach ausführen, den Platzhalter durch den geprüften Datenordner ersetzen:
+\begin{verbatim}
+python -m semeval_framing.cli "PFAD_ZUM_EN_ORDNER"
+\end{verbatim}
+  \item \textbf{Format und Statistik prüfen.}
+    Erwarteter Dateiname:\par
+    \texttt{subtask-1-annotations-with-paragraphs.txt}.\par
+    Prüfe zehn Zeilen einschließlich leerer und mehrfacher Labels. Notiere Anzahl der Dokumente,
+    Absätze und Labels sowie den Kein-Frame-Anteil. \verb|--json| liefert maschinenlesbare Statistik.
+  \item \textbf{Quellen zusammenführen und Dubletten klären.}
+    Nutze \texttt{read\_st1\_file} für eine explizite Dateiliste.
+    Gleiche Dokument-IDs und Offsets ab, prüfe identische Texte und protokolliere die Bereinigung.
+    Der bestehende Loader meldet doppelte Schlüssel als Fehler. Nicht durch Umbenennen umgehen.
+  \item \textbf{Split implementieren und speichern.}
+    Lege \texttt{src/semeval\_framing/split.py} neu an.
+    Für scikit-learn die \hyperlink{plan-text}{virtuelle Umgebung aus Paket 3} einrichten.
+    Startvorschlag: \href{https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GroupShuffleSplit.html}{GroupShuffleSplit},
+    20\,\% Validierungsdokumente, Seed 42, Gruppen nach Dokument-ID.
+    Prüfe disjunkte Dokumentmengen und Labelhäufigkeiten je Split. Verwandte Dubletten müssen zusammenbleiben.
+  \item \textbf{Früh übergeben.}
+    Speichere lokal \texttt{data/processed/week4/split.json} mit Dokument-IDs,
+    Quellenliste und Seed sowie \texttt{paragraphs.jsonl} mit
+    \texttt{document\_id}, \texttt{begin}, \texttt{end}, \texttt{text}, \texttt{labels}, \texttt{split}.
+    Bestätige Paket 3, 4 und 5 denselben Stand. Labelreihenfolge ist \texttt{FRAME\_LABELS}.
+\end{startsteps}
+
+\planheading{Fertig, wenn}
+\checkbox\ Loader-Tests grün, Quellen und Statistik dokumentiert.\par
+\checkbox\ Keine Dokumentüberschneidung, seltene oder fehlende Trainingslabels gemeldet.\par
+\checkbox\ \texttt{docs/week4/daten.md} enthält Datenversion, Split-Regel und Übergabehinweis.
+
+\planheading{Falls du blockiert bist}
+Ohne Zugang: Loader-Tests ausführen und Split mit erfundenen Beispielen testen.
+Das als Funktionstest, nicht als Wettbewerbsergebnis melden. Bei abweichendem Dateiformat erst den Parser klären.
+Rohdaten, Goldlabels und lokale Exporte nicht ins öffentliche Repository hochladen.
+
+\newpage
+\hypertarget{plan-text}{}
+\followuptitle{Paket 3: Erste Text-Baseline}
+\textbf{Ziel heute:} Ein reproduzierbarer TF-IDF-Lauf und auswertbare Vorhersagen.
+Ein CPU-Lauf genügt. Ein Transformer-Modell ist heute keine Voraussetzung.
+
+\planheading{Voraussetzungen und Status}
+Du brauchst Paket 2s lokalen Export und Split sowie Paket 5s Vorhersageformat.
+\textbf{Ein Trainingsskript ist noch nicht vorhanden.} Die folgenden Modellschritte sind zu implementieren.
+Starte mit der \repolink{README.md}{Repository-Einrichtung}. Ein schlanker Weg in PowerShell:
+\begin{verbatim}
+py -3.11 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -e .
+.\.venv\Scripts\python.exe -m pip install scikit-learn
+\end{verbatim}
+Eine bestehende virtuelle Umgebung wiederverwenden. Falls \texttt{py -3.11} fehlt,
+eine vorhandene Python-Version ab 3.11 verwenden. Alle weiteren Python-Aufrufe in dieser Umgebung ausführen.
+
+\planheading{Jetzt starten: Schritt für Schritt}
+\begin{startsteps}
+  \item \textbf{Train und Validation laden.}
+    Lade \texttt{data/processed/week4/paragraphs.jsonl} und die Split-Datei.
+    Verwende exakt die von Paket 2 freigegebenen Beispiele. Keine eigene zufällige Aufteilung erzeugen.
+  \item \textbf{Zielmatrix bauen.}
+    Verwende \texttt{MultiLabelBinarizer(classes=FRAME\_LABELS)}.
+    Erwartet wird eine Matrix mit 14 Spalten. Leere Labelmengen werden zu Nullvektoren.
+    Fehlende Trainingsklassen und konstante Spalten dokumentieren.
+  \item \textbf{Einfache Pipeline implementieren.}
+    Lege \texttt{src/semeval\_framing/baseline\_tfidf.py} neu an.
+    Nutze \href{https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html}{TfidfVectorizer}
+    und \href{https://scikit-learn.org/stable/modules/generated/sklearn.multiclass.OneVsRestClassifier.html}{OneVsRestClassifier}.
+    Startkonfiguration: Wort-Unigramme, \texttt{min\_df=1}, maximal 30\,000 Merkmale,
+    \texttt{LogisticRegression(C=1.0, max\_iter=1000)}.
+    Fit nur auf Training, danach Validation transformieren und vorhersagen.
+  \item \textbf{Referenz und Schwelle festlegen.}
+    Starte mit 0,5 als Schwelle für die vorhergesagten Wahrscheinlichkeiten.
+    Ergänze eine konstante Referenz aus den häufigsten binären Trainingsentscheidungen je Label.
+    Sie kann für seltene Labels ausschließlich Nein ergeben. Beide Systeme identisch auswerten lassen.
+  \item \textbf{Vorhersagen exportieren.}
+    Schreibe lokal \texttt{outputs/week4/tfidf/validation.tsv} im mit Paket 5 abgestimmten Format.
+    Jede Validierungszeile braucht Dokument-ID, Original-Offsets und vorhergesagte Labels,
+    aber keinen Absatztext. Auch Vorhersagen ohne Frame müssen erhalten bleiben.
+  \item \textbf{Lauf reproduzierbar machen.}
+    Baue eine Kommandozeilenschnittstelle für Eingabe, Split und Ausgabe.
+    Dokumentiere den tatsächlich funktionierenden Startbefehl, Paketversionen und Konfiguration.
+    Wiederhole den Lauf einmal und übergib die Vorhersagen an Paket 5.
+\end{startsteps}
+
+\planheading{Fertig, wenn}
+\checkbox\ Ein echter Validierungslauf und eine konstante Referenz liegen vor.\par
+\checkbox\ Ausgabe umfasst genau die freigegebenen Absatzschlüssel.\par
+\checkbox\ \texttt{docs/week4/textbaseline.md} erklärt Aufruf, Datenstand und Grenzen.
+
+\planheading{Falls du blockiert bist}
+Bis der Split vorliegt, Pipeline und Export auf erfundenen Beispielen testen.
+Bei Konvergenzwarnungen Iterationen oder Merkmalszahl anpassen und Änderung notieren.
+Ein Funktionstest ohne echte Daten ist ein Teilergebnis, keine gemessene Baseline-Leistung.
+
+\newpage
+\hypertarget{plan-embeddings}{}
+\followuptitle{Paket 4: Embeddings und Label-Prototypen}
+\textbf{Ziel heute:} Eine zweite Baseline auf demselben Split, ohne einen zusätzlichen Klassifikator zu trainieren.
+Zunächst ein Prototyp pro Label. Clustering und synthetische Texte sind optional.
+
+\planheading{Voraussetzungen und Status}
+Paket 2 liefert Daten und Split, Paket 5 das Ausgabeformat.
+\textbf{Embedding-Skript und Zusatzbibliothek fehlen noch im Repository.}
+Nutze eine virtuelle Umgebung wie in Paket 3. Installiere darin bei erlaubtem Download:
+\begin{verbatim}
+.\.venv\Scripts\python.exe -m pip install sentence-transformers
+\end{verbatim}
+Dokumentiere die installierte Version. Lies die
+\href{https://www.sbert.net/docs/sentence_transformer/usage/semantic_textual_similarity.html}{Anleitung zu Text-Embeddings}
+und die \href{https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2}{Modellkarte von all-MiniLM-L6-v2}.
+Dieses englische Modell ist ein Startvorschlag, kein vorgegebener Wettbewerbssieger.
+
+\planheading{Jetzt starten: Schritt für Schritt}
+\begin{startsteps}
+  \item \textbf{Modell festlegen und Smoke-Test machen.}
+    Lade \texttt{sentence-transformers/all-MiniLM-L6-v2} auf CPU.
+    Prüfe mit zwei erfundenen Sätzen, ob Vektoren entstehen. Der erste Aufruf lädt Modellgewichte herunter.
+    Offizielle Texte nicht an einen externen Inferenzdienst senden.
+  \item \textbf{Absätze einbetten.}
+    Lege \texttt{src/semeval\_framing/baseline\_prototype.py} neu an.
+    Verwende \texttt{encode(..., normalize\_embeddings=True)}.
+    Halte Zuordnung zu Absatzschlüsseln fest. Das Startmodell kürzt lange Eingaben standardmäßig
+    nach 256 Wordpieces. Dokumentiere den Anteil betroffener Absätze und die gewählte Behandlung.
+  \item \textbf{Prototypen nur aus Training bilden.}
+    Bilde für jedes Label den Mittelwert seiner positiven Trainingsvektoren und normiere ihn erneut.
+    Ein mehrfach gelabelter Absatz darf zu mehreren Prototypen beitragen.
+    Ohne positive Trainingsbeispiele bleibt das Label inaktiv. Melde den Fall, statt Validation beizumischen.
+  \item \textbf{Kosinuswerte je Label berechnen.}
+    Für jeden Validierungsabsatz alle aktiven Prototypen vergleichen.
+    Das Skalarprodukt normierter Vektoren ergibt den Kosinuswert. Wähle nicht nur das beste Label.
+    Kosinuswerte sind keine kalibrierten Wahrscheinlichkeiten.
+  \item \textbf{Eine gemeinsame Schwelle wählen.}
+    Startvorschlag: 0,2, 0,3, 0,4, 0,5 und 0,6 auf Validation prüfen.
+    Ein Label wird ausgegeben, wenn sein Wert die Schwelle erreicht.
+    Mit Paket 5 die Schwelle nach offiziellem Micro-F1 auswählen und Gleichstände vorab regeln.
+    Diese Werte sind schwellenoptimierte Validierungsergebnisse, keine unabhängigen Testwerte.
+  \item \textbf{Export und Übergabe.}
+    Schreibe \texttt{outputs/week4/prototype/validation.tsv} im gemeinsamen Format.
+    Dokumentiere Modellrevision, Textkürzung, Schwellenversuche und Trainingshäufigkeiten.
+    Speichere Vektoren nur lokal und gib Paket 5 die Vorhersagen und Laufkonfiguration.
+\end{startsteps}
+
+\planheading{Fertig, wenn}
+\checkbox\ Jeder aktive Prototyp stammt nur aus dem Trainingssplit.\par
+\checkbox\ Alle 14 Labels bleiben in einer festen Reihenfolge, auch inaktive Labels.\par
+\checkbox\ \texttt{docs/week4/embeddings.md} beschreibt Lauf, Schwelle und Grenzen.
+
+\planheading{Falls du blockiert bist}
+Ohne Modellzugang oder Internet ein bereits lokal verfügbares Modell verwenden und die Abweichung melden.
+Andernfalls Kosinusberechnung und Export mit kleinen erfundenen Vektoren testen.
+Ohne echten Modelllauf keine Qualitätsaussage treffen. Clustering erst nach funktionierender Baseline beginnen.
+
+\newpage
+\hypertarget{plan-evaluation}{}
+\followuptitle{Paket 5: Evaluation und Fehleranalyse}
+\textbf{Ziel heute:} Ein geprüftes Ausgabeformat und eine vergleichbare Ergebnistabelle.
+Du startest vor den Modellläufen und koordinierst die Übergaben mit Paket 2, 3 und 4.
+
+\planheading{Startpunkt und Voraussetzungen}
+Öffne die \href{https://propaganda.math.unipd.it/semeval2027task9/index.html}{offizielle Evaluation}
+und \repolink{third_party/README.md}{die Hinweise zum Starter-Kit}.
+Der Scorer ist nicht im Repository enthalten. Zugriff auf das lokale Kit ist nötig,
+um seinen echten Aufruf zu prüfen. Scorer-Anbindung und Submission-Writer sind noch zu implementieren.
+
+\planheading{Jetzt starten: Schritt für Schritt}
+\begin{startsteps}
+  \item \textbf{Scorer und Anleitung finden.}
+    Prüfe lokal \texttt{third\_party/official-starter-kit/subtask1/}.
+    Lies dessen README und Hilfe. Notiere Dateiname, Version und Argumente.
+    Verwende den dort dokumentierten Befehl. Ein konkreter Scorer-Aufruf wird hier nicht erfunden.
+  \item \textbf{Gemeinsame Schnittstelle sofort mitteilen.}
+    Intern verwenden wir \texttt{document\_id}, \texttt{begin}, \texttt{end} und \texttt{labels}.
+    Für die Task-Ausgabe werden die Felder durch Tabs getrennt, mehrere Labels ebenfalls.
+    Ohne Frame bleibt das Labelfeld leer. Kein Absatztext, keine selbst erfundenen Labelnamen.
+    Ob eine Kopfzeile erlaubt ist, anhand des Kits prüfen, nicht voraussetzen.
+  \item \textbf{Vier kleine Prüffälle auswerten.}
+    Erstelle selbst formulierte Fixtures: identische Gold- und Systemlabels,
+    ein fehlendes Label, ein zusätzliches Label sowie ein beidseitiger Kein-Frame-Fall.
+    Ergänze eine identische gemischte Datei mit positiven und leeren Labels.
+    Prüfe die Behandlung von \texttt{None}, leeren Feldern und Absatzschlüsseln.
+  \item \textbf{Writer und Formatprüfung implementieren.}
+    Lege \texttt{src/semeval\_framing/evaluate.py} und
+    \texttt{tests/test\_evaluation.py} neu an.
+    Prüfe erlaubte Labels, eindeutige Schlüssel, vollständige Zeilenzahl und exakte Offsets.
+    Jeder erwartete Validierungsabsatz muss genau einmal vorkommen.
+  \item \textbf{Modelle auf identischer Grundlage vergleichen.}
+    Werte konstante Referenz, TF-IDF und Prototypen auf denselben Validierungs-IDs aus.
+    Tabelle: Modell, Datenversion, Split/Seed, Schwelle, Micro-F1, Macro-F1 und Status.
+    Fehlende Läufe als \glqq nicht durchgeführt\grqq{} eintragen, nicht als Nullscore.
+    Prototypen-Schwellenwahl auf Validation transparent ausweisen.
+  \item \textbf{Drei Fehler untersuchen und nächste Entscheidung ableiten.}
+    Wähle etwa ein fehlendes, ein falsches und ein verwechseltes Label.
+    Notiere erwartete und vorhergesagte Labels, mögliche Ursache und nächsten Test.
+    Nutze Paket 1s Abgrenzungen. Eine Caption-/OCR-Pipeline nur als optionalen Ausblick skizzieren.
+\end{startsteps}
+
+\planheading{Ergebnis ablegen}
+\texttt{results/week4/metrics.csv}: nur aggregierte Ergebnisse und Konfigurationen.\par
+\texttt{docs/week4/evaluation.md}: echter Scorer-Aufruf, Prüffälle, Grenzen und Empfehlung.\par
+\texttt{outputs/week4/error\_analysis.md}: Fehlerdetails und Textbelege ausschließlich lokal.
+Keine offiziellen Texte, Goldlabels oder vollständigen Vorhersagen veröffentlichen.
+
+\planheading{Fertig, wenn}
+\checkbox\ Format und Sonderfälle sind geprüft und an das Team kommuniziert.\par
+\checkbox\ Mindestens die konstante Referenz ist ausgewertet oder der fehlende Scorer klar dokumentiert.\par
+\checkbox\ Vorliegende Modellläufe sind vergleichbar, drei Fehlerfälle oder Prüffälle sind kommentiert.
+
+\planheading{Falls du blockiert bist}
+Ohne Starter-Kit bereits Writer und Fixtures testen. Eine eigene F1-Berechnung ist nur eine
+vorläufige Diagnose, bis die \texttt{None}-Behandlung dem offiziellen Scorer entspricht.
+Ohne Modellvorhersagen mit der konstanten Referenz arbeiten. Keine Scores erfinden.
+
+\newpage
+\normalsize
+\followuptitle{Literatur und Quellen}
+\begin{description}[font=\normalfont,leftmargin=8mm,labelwidth=6mm,labelsep=2mm,
+  itemsep=12pt,parsep=3pt,topsep=8pt]
+  \item[{[1]}] \hypertarget{quelle-task}{}SemEval 2027 Task 9 (o.\,J.).
+    \textit{Analysis of Multimodal Framing in the News.}
+    Offizielle Task-Beschreibung mit Subtasks, Ausgabeformaten und Evaluation.
+    Zugriff am 3. November 2026.\par
+    {\small\url{https://propaganda.math.unipd.it/semeval2027task9/index.html}}\par
+    Zugehörige Label-Liste:\par
+    {\small\url{https://propaganda.math.unipd.it/semeval2027task9/data/framing-labels.txt}}
+  \item[{[2]}] \hypertarget{quelle-card}{}Card, D., Boydstun, A. E., Gross, J. H., Resnik, P. und Smith, N. A. (2015).
+    \textit{The Media Frames Corpus: Annotations of Frames Across Issues.}
+    In \textit{Proceedings of the 53rd Annual Meeting of the Association for Computational
+    Linguistics and the 7th International Joint Conference on Natural Language Processing
+    (Volume 2: Short Papers)}, S.\ 438 bis 444.
+    Association for Computational Linguistics.\par
+    {\small\url{https://doi.org/10.3115/v1/P15-2072}}
+  \item[{[3]}] \hypertarget{quelle-sklearn}{}scikit-learn (o.\,J.).
+    \textit{Multiclass and multioutput algorithms.}
+    Online-Dokumentation, insbesondere Multi-Label-Klassifikation und One-vs-Rest.
+    Zugriff am 3. November 2026.\par
+    {\small\url{https://scikit-learn.org/stable/modules/multiclass.html}}
+  \item[{[4]}] \hypertarget{quelle-sbert}{}Sentence Transformers (o.\,J.).
+    \textit{Semantic Textual Similarity.}
+    Online-Dokumentation zur Berechnung von Text-Embeddings und Kosinusähnlichkeit.
+    Zugriff am 3. November 2026.\par
+    {\small
+    \href{https://www.sbert.net/docs/sentence_transformer/usage/semantic_textual_similarity.html}{\nolinkurl{https://www.sbert.net/docs/sentence_transformer/}}\par
+    \href{https://www.sbert.net/docs/sentence_transformer/usage/semantic_textual_similarity.html}{\nolinkurl{usage/semantic_textual_similarity.html}}}
+  \item[{[5]}] Piskorski, J., Stefanovitch, N., Da San Martino, G. und Nakov, P. (2023).
+    \textit{SemEval-2023 Task 3: Detecting the Category, the Framing, and the Persuasion
+    Techniques in Online News in a Multi-lingual Setup.}
+    Proceedings of the 17th International Workshop on Semantic Evaluation.\par
+    {\small\url{https://aclanthology.org/2023.semeval-1.317/}}
+  \item[{[6]}] Sentence Transformers (o.\,J.).
+    \textit{all-MiniLM-L6-v2.} Modellkarte mit Hinweisen zur Nutzung und Eingabelänge.
+    Zugriff am 3. November 2026.\par
+    {\small\url{https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2}}
+\end{description}
 
 \end{document}
