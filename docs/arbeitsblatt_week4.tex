@@ -4,60 +4,53 @@
 \usepackage[utf8]{inputenc}
 \usepackage[ngerman]{babel}
 \usepackage{lmodern}
-\usepackage[margin=1.55cm,top=1.35cm,bottom=1.35cm]{geometry}
-\usepackage[table]{xcolor}
+\usepackage[left=2.45cm,right=2.45cm,top=1.9cm,bottom=1.9cm]{geometry}
+\usepackage{microtype}
 \usepackage{enumitem}
 \usepackage{tabularx}
 \usepackage{array}
+\usepackage{booktabs}
 \usepackage{amssymb}
-\usepackage{fancyhdr}
-\usepackage{microtype}
-
-\definecolor{taskblue}{HTML}{184E77}
-\definecolor{tasklight}{HTML}{EAF3F8}
-\definecolor{taskgray}{HTML}{F3F4F6}
-\definecolor{taskgreen}{HTML}{2D6A4F}
+\usepackage{titlesec}
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{2pt}
-\setlist[itemize]{leftmargin=5mm,itemsep=1.2pt,topsep=2pt,parsep=0pt}
-\renewcommand{\familydefault}{\sfdefault}
-\pagestyle{fancy}
-\fancyhf{}
-\renewcommand{\headrulewidth}{0pt}
-\fancyfoot[L]{\footnotesize SemEval 2027 Task 9 -- Teamarbeitsblatt}
-\fancyfoot[R]{\footnotesize Week 4}
+\setlist[itemize]{leftmargin=5mm,itemsep=0.8pt,topsep=2pt,parsep=0pt}
+\pagestyle{plain}
+
+\titleformat{\section}
+  {\normalfont\large\bfseries}
+  {\thesection}
+  {0.9em}
+  {}
+\titlespacing*{\section}{0pt}{1.6ex plus 0.3ex minus 0.2ex}{0.6ex}
 
 \newcommand{\checkbox}{\(\square\)}
-\newcommand{\field}[2]{%
-  \textbf{#1}\hspace{2mm}\rule{#2}{0.4pt}%
+\newcommand{\entryline}[2]{%
+  \textbf{#1}\hspace{1.5mm}\rule{#2}{0.35pt}%
 }
-\newcommand{\sectiontitle}[1]{%
-  \vspace{2mm}%
-  {\large\bfseries\color{taskblue} #1}\par
-  \vspace{0.5mm}\color{taskblue}\rule{\linewidth}{0.7pt}\color{black}\vspace{1mm}%
-}
+\newcommand{\writingline}{\rule{\linewidth}{0.35pt}}
 
 \begin{document}
 
 \begin{center}
-  {\LARGE\bfseries\color{taskblue} SemEval 2027 Task 9}\par
-  \vspace{1mm}
-  {\Large\bfseries Arbeitsblatt -- Forschungsblock Week 4}\par
-  \vspace{1mm}
-  {\normalsize 180 Minuten individuelle Arbeit mit gemeinsamer Auswertung}
+  {\small SemEval 2027 Task 9: Analysis of Multimodal Framing in the News}\par
+  \vspace{0.7em}
+  {\LARGE\bfseries Arbeitsblatt für den Forschungsblock}\par
+  \vspace{0.35em}
+  {\large Week 4 -- 180 Minuten}\par
 \end{center}
 
-\vspace{2mm}
-\colorbox{tasklight}{%
-  \parbox{\dimexpr\linewidth-2\fboxsep\relax}{%
-    \field{Name:}{5.2cm}\hfill
-    \field{Teamrolle:}{4.3cm}\hfill
-    \textbf{Datum:} 03.11.2026
-  }%
-}
+\vspace{0.8em}
+\begin{tabularx}{\linewidth}{@{}X X r@{}}
+  \entryline{Name:}{4.2cm} &
+  \entryline{Teamrolle:}{3.4cm} &
+  \textbf{Datum:} 3. November 2026
+\end{tabularx}
 
-\sectiontitle{1. Grundidee}
+\vspace{0.5em}
+
+\section{Grundidee}
 
 \begin{itemize}
   \item Task 9, Subtask 1 ist eine \textbf{Multi-Label-Klassifikationsaufgabe}.
@@ -67,7 +60,7 @@
         \texttt{Economic} -- ja oder nein.
 \end{itemize}
 
-\sectiontitle{2. Mögliche Baselines}
+\section{Mögliche Baselines}
 
 \begin{itemize}
   \item Einfache regel- oder häufigkeitsbasierte Baseline.
@@ -77,7 +70,7 @@
         ungünstig, weil viele Kombinationen selten sind oder erst im Testset auftreten.
 \end{itemize}
 
-\sectiontitle{3. Embedding-basierter Ansatz}
+\section{Embedding-basierter Ansatz}
 
 \begin{itemize}
   \item Alle beispielsweise mit \texttt{Political} annotierten Absätze in Embeddings umwandeln.
@@ -87,7 +80,7 @@
   \item Ergebnis: eine einfache Nearest-Prototype-Baseline als Vergleich zum trainierten Modell.
 \end{itemize}
 
-\sectiontitle{4. Synthetische Trainingsdaten}
+\section{Synthetische Trainingsdaten}
 
 \begin{itemize}
   \item Sprachmodelle können zusätzliche Beispieltexte für seltene Labels generieren.
@@ -97,7 +90,7 @@
   \item Generierte Beispiele stichprobenartig auf Labelqualität und Datenlecks prüfen.
 \end{itemize}
 
-\sectiontitle{5. Bilder in Text übersetzen}
+\section{Bilder in Text übersetzen}
 
 \begin{itemize}
   \item Ein Vision-Language-Modell beschreibt jedes Nachrichtenbild als Text beziehungsweise Caption.
@@ -107,91 +100,101 @@
 \end{itemize}
 
 \vfill
-\colorbox{taskgray}{%
-  \parbox{\dimexpr\linewidth-2\fboxsep\relax}{%
-    \textbf{Leitfrage für heute:} Welche einfache, nachvollziehbare Pipeline liefert uns
-    zuerst eine reproduzierbare Vergleichsbasis -- und welche konkrete Verbesserung testen
-    wir danach?
-  }%
-}
+\begin{quote}
+  \itshape
+  Leitfrage für heute: Welche einfache, nachvollziehbare Pipeline liefert uns zuerst
+  eine reproduzierbare Vergleichsbasis -- und welche konkrete Verbesserung testen wir danach?
+\end{quote}
 
 \newpage
 
 \begin{center}
-  {\LARGE\bfseries\color{taskblue} Hauptaufgaben -- Week 4}\par
-  \vspace{1mm}
-  {\normalsize Jede Person bearbeitet ein Arbeitspaket und dokumentiert ein überprüfbares Ergebnis.}
+  {\small SemEval 2027 Task 9}\par
+  \vspace{0.5em}
+  {\LARGE\bfseries Hauptaufgaben und Aufgaben für heute}\par
+  \vspace{0.25em}
+  {\large Week 4}\par
 \end{center}
 
-\vspace{2mm}
-\colorbox{tasklight}{%
-  \parbox{\dimexpr\linewidth-2\fboxsep\relax}{%
-    \field{Name:}{5.4cm}\hfill
-    \field{Arbeitspaket:}{3.8cm}\hfill
-    \textbf{Zeit:} 180 Minuten
-  }%
-}
+\vspace{0.7em}
+\begin{tabularx}{\linewidth}{@{}X X r@{}}
+  \entryline{Name:}{4.2cm} &
+  \entryline{Arbeitspaket:}{3.0cm} &
+  \textbf{Arbeitszeit:} 180 Minuten
+\end{tabularx}
 
-\sectiontitle{1. Fünf Arbeitspakete -- jede Person übernimmt eines}
+\section{Fünf Arbeitspakete}
 
-\renewcommand{\arraystretch}{1.18}
-\begin{tabularx}{\linewidth}{>{\centering\arraybackslash}p{0.8cm} >{\bfseries}p{3.0cm} X >{\raggedright\arraybackslash}p{3.6cm}}
-\rowcolor{taskblue}
-\color{white} & \color{white}Arbeitspaket & \color{white}Auftrag für heute & \color{white}Ergebnis nach 180 Minuten \\
+Jede Person übernimmt ein Arbeitspaket und dokumentiert ein überprüfbares Ergebnis.
+
+\vspace{0.35em}
+\small
+\renewcommand{\arraystretch}{1.16}
+\begin{tabularx}{\linewidth}{@{}>{\centering\arraybackslash}p{0.65cm} >{\bfseries\raggedright\arraybackslash}p{2.75cm} X >{\raggedright\arraybackslash}p{3.85cm}@{}}
+\toprule
+ & Arbeitspaket & Auftrag für heute & Ergebnis nach 180 Minuten \\
+\midrule
 \checkbox & Literatur und Hypothesen &
-3--5 relevante Arbeiten zu Multi-Label-Klassifikation oder Framing Detection finden und deren Methoden vergleichen. &
-Quellenliste plus zwei testbare Hypothesen. \\
-\rowcolor{taskgray}
+3--5 Arbeiten zu Multi-Label-Klassifikation oder Framing Detection finden und ihre Methoden vergleichen. &
+Quellenliste und zwei testbare Hypothesen. \\
+\addlinespace
 \checkbox & Daten und Labels &
 Englische Daten prüfen: Labelverteilung, Kein-Frame-Anteil, Multi-Label-Anteil und auffällige Datenprobleme. &
-Kurze Statistik plus drei Beobachtungen. \\
+Kurze Statistik und drei Beobachtungen. \\
+\addlinespace
 \checkbox & Text-Baseline &
-14-Output-Modell und 14 binäre Klassifikatoren konzeptionell vergleichen; kleinsten reproduzierbaren Versuch planen oder starten. &
+14-Output-Modell und 14 binäre Klassifikatoren vergleichen; kleinsten reproduzierbaren Versuch planen oder starten. &
 Pipeline, Parameter und erster Laufplan. \\
-\rowcolor{taskgray}
+\addlinespace
 \checkbox & Embeddings und Synthese &
-Embedding-/Kosinus-Baseline entwerfen; Nutzen von Clustering und synthetischen Beispielen für seltene Labels prüfen. &
+Embedding-/Kosinus-Baseline entwerfen; Clustering und synthetische Beispiele für seltene Labels prüfen. &
 Versuchsdesign mit Modellwahl und Risiken. \\
+\addlinespace
 \checkbox & Bild-zu-Text und Evaluation &
 Captioning-/OCR-Pipeline für Subtask 2 skizzieren und Varianten für Bild, Caption und Artikelkontext definieren. &
-Pipeline-Diagramm plus Vergleichsbaselines. \\
+Pipeline-Diagramm und Vergleichsbaselines. \\
+\bottomrule
 \end{tabularx}
+\normalsize
 
-\sectiontitle{2. Zeitplan für die 180 Minuten}
+\section{Zeitplan für die 180 Minuten}
 
-\begin{tabularx}{\linewidth}{>{\bfseries\color{taskblue}}p{2.0cm} X p{5.0cm}}
-0--15 Min. & Gemeinsamer Start: Ziel, Datenstand und Arbeitspakete klären. & Paket und Leitfrage eintragen. \\
-15--30 Min. & Individuelle Forschungsfrage und erwartetes Ergebnis festlegen. & Hypothese oder Entscheidungskriterium. \\
+\small
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}p{2.0cm} X p{4.7cm}@{}}
+\toprule
+Zeit & Tätigkeit & Erwartetes Zwischenergebnis \\
+\midrule
+0--15 Min. & Gemeinsamer Start: Ziel, Datenstand und Pakete klären. & Paket und Leitfrage eintragen. \\
+15--30 Min. & Forschungsfrage und erwartetes Ergebnis festlegen. & Hypothese oder Entscheidungskriterium. \\
 30--105 Min. & Recherche, Analyse oder erster technischer Versuch. & Quellen, Notizen, Code oder Statistik. \\
 105--135 Min. & Ergebnis verdichten und überprüfbar dokumentieren. & Ein teilbares Artefakt vorbereiten. \\
-135--165 Min. & Kurzberichte: pro Person maximal sechs Minuten. & Ergebnis, Problem, Empfehlung. \\
+135--165 Min. & Kurzberichte: pro Person maximal sechs Minuten. & Ergebnis, Problem und Empfehlung. \\
 165--180 Min. & Gemeinsame Entscheidungen und nächste Schritte. & Zuständigkeit und nächster Termin. \\
+\bottomrule
 \end{tabularx}
+\normalsize
 
-\sectiontitle{3. Meine Dokumentation}
+\section{Meine Dokumentation}
 
 \textbf{Meine konkrete Forschungsfrage oder Hypothese:}\par
-\vspace{1mm}\rule{\linewidth}{0.35pt}\par\vspace{3mm}
+\vspace{0.3em}\writingline\par\vspace{0.8em}
 
-\begin{tabularx}{\linewidth}{X X}
+\begin{tabularx}{\linewidth}{@{}X X@{}}
 \textbf{Wichtigste Erkenntnisse / Evidenz:} & \textbf{Probleme / offene Fragen:} \\
-\vspace{13mm} & \vspace{13mm} \\
-\hline
+\vspace{9mm} & \vspace{9mm} \\
+\midrule
 \end{tabularx}
 
-\vspace{2mm}
+\vspace{0.5em}
 \textbf{Mein konkretes Ergebnis (Link, Datei, Statistik, Pipeline oder Literaturübersicht):}\par
-\vspace{1mm}\rule{\linewidth}{0.35pt}\par\vspace{3mm}
+\vspace{0.3em}\writingline\par\vspace{0.8em}
 
 \textbf{Meine Empfehlung an das Team:}\par
-\vspace{1mm}\rule{\linewidth}{0.35pt}\par\vspace{3mm}
+\vspace{0.3em}\writingline\par\vspace{0.8em}
 
-\colorbox{tasklight}{%
-  \parbox{\dimexpr\linewidth-2\fboxsep\relax}{%
-    \checkbox\ Ergebnis im Team vorgestellt \hfill
-    \checkbox\ Artefakt im Repository/Teamordner abgelegt \hfill
-    \checkbox\ Nächster Schritt festgelegt
-  }%
-}
+\small
+\checkbox\ Ergebnis vorgestellt \hfill
+\checkbox\ Artefakt abgelegt \hfill
+\checkbox\ Nächsten Schritt und Zuständigkeit festgelegt
 
 \end{document}
