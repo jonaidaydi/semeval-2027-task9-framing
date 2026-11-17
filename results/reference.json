@@ -1,0 +1,187 @@
+{
+  "release": "data-fourth-batch-russian-2026_11_1.zip (downloaded 2026-11-16)",
+  "versions": {
+    "python": "3.13.13",
+    "numpy": "2.5.4",
+    "scikit_learn": "1.9.1"
+  },
+  "statistics": {
+    "main": {
+      "documents": 96,
+      "paragraphs": 1036,
+      "no_frame": 258,
+      "empty_text": 0,
+      "label_counts": {
+        "Economic": 82,
+        "Capacity_and_resources": 77,
+        "Morality": 63,
+        "Fairness_and_equality": 61,
+        "Legality_Constitutionality_and_jurisprudence": 72,
+        "Policy_prescription_and_evaluation": 83,
+        "Crime_and_punishment": 77,
+        "Security_and_defense": 184,
+        "Health_and_safety": 106,
+        "Quality_of_life": 103,
+        "Cultural_identity": 33,
+        "Public_opinion": 46,
+        "Political": 181,
+        "External_regulation_and_reputation": 76
+      }
+    },
+    "auxiliary": {
+      "documents": 20,
+      "paragraphs": 224,
+      "no_frame": 66,
+      "empty_text": 0,
+      "label_counts": {
+        "Economic": 8,
+        "Capacity_and_resources": 20,
+        "Morality": 5,
+        "Fairness_and_equality": 20,
+        "Legality_Constitutionality_and_jurisprudence": 19,
+        "Policy_prescription_and_evaluation": 14,
+        "Crime_and_punishment": 26,
+        "Security_and_defense": 42,
+        "Health_and_safety": 17,
+        "Quality_of_life": 20,
+        "Cultural_identity": 3,
+        "Public_opinion": 9,
+        "Political": 34,
+        "External_regulation_and_reputation": 23
+      }
+    },
+    "core_training": {
+      "documents": 76,
+      "paragraphs": 814,
+      "no_frame": 199,
+      "empty_text": 0,
+      "label_counts": {
+        "Economic": 66,
+        "Capacity_and_resources": 64,
+        "Morality": 57,
+        "Fairness_and_equality": 57,
+        "Legality_Constitutionality_and_jurisprudence": 49,
+        "Policy_prescription_and_evaluation": 59,
+        "Crime_and_punishment": 70,
+        "Security_and_defense": 139,
+        "Health_and_safety": 79,
+        "Quality_of_life": 78,
+        "Cultural_identity": 25,
+        "Public_opinion": 31,
+        "Political": 145,
+        "External_regulation_and_reputation": 58
+      }
+    },
+    "outer_training": {
+      "documents": 96,
+      "paragraphs": 1038,
+      "no_frame": 265,
+      "empty_text": 0,
+      "label_counts": {
+        "Economic": 74,
+        "Capacity_and_resources": 84,
+        "Morality": 62,
+        "Fairness_and_equality": 77,
+        "Legality_Constitutionality_and_jurisprudence": 68,
+        "Policy_prescription_and_evaluation": 73,
+        "Crime_and_punishment": 96,
+        "Security_and_defense": 181,
+        "Health_and_safety": 96,
+        "Quality_of_life": 98,
+        "Cultural_identity": 28,
+        "Public_opinion": 40,
+        "Political": 179,
+        "External_regulation_and_reputation": 81
+      }
+    },
+    "outer_validation": {
+      "documents": 20,
+      "paragraphs": 222,
+      "no_frame": 59,
+      "empty_text": 0,
+      "label_counts": {
+        "Economic": 16,
+        "Capacity_and_resources": 13,
+        "Morality": 6,
+        "Fairness_and_equality": 4,
+        "Legality_Constitutionality_and_jurisprudence": 23,
+        "Policy_prescription_and_evaluation": 24,
+        "Crime_and_punishment": 7,
+        "Security_and_defense": 45,
+        "Health_and_safety": 27,
+        "Quality_of_life": 25,
+        "Cultural_identity": 8,
+        "Public_opinion": 15,
+        "Political": 36,
+        "External_regulation_and_reputation": 18
+      }
+    }
+  },
+  "metrics": {
+    "no_frame": {
+      "micro_f1": 0.21532846715328466,
+      "macro_f1": 0.027995255041518386,
+      "parameters": {
+        "rule": "always no frame"
+      },
+      "no_frame_predictions": 222
+    },
+    "tfidf_core_050": {
+      "micro_f1": 0.21532846715328466,
+      "macro_f1": 0.027995255041518386,
+      "parameters": {
+        "balanced": false,
+        "threshold": 0.5,
+        "training": "main only"
+      },
+      "no_frame_predictions": 222
+    },
+    "tfidf_all_050": {
+      "micro_f1": 0.21532846715328466,
+      "macro_f1": 0.027995255041518386,
+      "parameters": {
+        "balanced": false,
+        "threshold": 0.5,
+        "training": "main plus auxiliary"
+      },
+      "no_frame_predictions": 222
+    },
+    "tfidf_core_tuned": {
+      "micro_f1": 0.3303303303303303,
+      "macro_f1": 0.24089905951677484,
+      "parameters": {
+        "balanced": true,
+        "threshold": 0.45,
+        "training": "main only",
+        "selection": "3-fold OOF on outer training only"
+      },
+      "no_frame_predictions": 63
+    },
+    "tfidf_tuned": {
+      "micro_f1": 0.34097421203438394,
+      "macro_f1": 0.26319146248396463,
+      "parameters": {
+        "balanced": true,
+        "threshold": 0.45,
+        "training": "main plus auxiliary",
+        "selection": "3-fold OOF on outer training only"
+      },
+      "no_frame_predictions": 72
+    }
+  },
+  "scorer_sha256": "e2bddcb8eaa2496796f880ac47a68d98b0be93a3ae56ed8400a98eeca14742ad",
+  "files_sha256": {
+    "split.json": "a17b3306b4bc2c5a3fe214d733526685ac593ffb2ad7505f30dcde1605b7050a",
+    "validation_gold.tsv": "d2aa75b8ee7a186172c060feb964623331fbcde283bc54ac4afe073a2db3e9be",
+    "no_frame_validation.tsv": "d675b3e66de36e8353083f10ee3298f974cd6223d9a753e86b67f3da4a7e569e",
+    "tfidf_core_050_validation.tsv": "d675b3e66de36e8353083f10ee3298f974cd6223d9a753e86b67f3da4a7e569e",
+    "tfidf_all_050_validation.tsv": "d675b3e66de36e8353083f10ee3298f974cd6223d9a753e86b67f3da4a7e569e",
+    "tfidf_core_tuned_validation.tsv": "ddfaa342788d2c82dc0c955d3b14d49197a8ce2f6743556eebb2014e8098f3e0",
+    "tfidf_tuned_validation.tsv": "30787aa2c5007e5fd8e544124d049be6f647cc232dfdd67d1e98b32269b89316",
+    "core_inner_tuning.json": "5e9b5bf7e4487d0811ccdba6e2c51da4038ba76730017f6906a9c65082e1b06e",
+    "inner_tuning.json": "fc567ea6548fadbc1572677ee0534966c90d48905d3d406ffab5204d4af9dcf2",
+    "full_training_tuning.json": "44cb0fc14a6ee61e14520a35160646252d1dffa8121d1632d925622d3651ac77",
+    "per_label.json": "14ecf482f265563d704198b000fd967d2dd5f6e449b90825fb109b75d3621c29",
+    "subtask_1_best_prediction.txt": "904a61a4ee78bd53cffe8b80dc1fc301db20b5e319b2e3009e97cdb0b22bea85"
+  }
+}

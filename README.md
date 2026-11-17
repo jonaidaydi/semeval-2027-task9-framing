@@ -1,108 +1,95 @@
-# SemEval 2027 Task 9 - Multimodal Framing
+# SemEval 2027 Task 9
 
-Team-Repository für **SemEval 2027 Task 9: Analysis of Multimodal Framing in
-the News**. Wir beginnen mit **Subtask 1 (Framing in Text), Englisch** und
-halten die Struktur offen für weitere Sprachen sowie Subtask 2.
+Englische Absatzklassifikation für Subtask 1: TF-IDF und 14 logistische
+Klassifikatoren. Ein Absatz kann mehrere Frames oder keinen Frame erhalten.
 
-## Was gehört ins Repository?
+## Installieren und testen
 
-| Versionieren | Nur lokal speichern |
-| --- | --- |
-| Quellcode und Tests | Originale Trainings-/Development-/Testdaten |
-| Konfigurationen | Offizielles Starter-Kit aus Codabench |
-| Dokumentation | Modellgewichte und Checkpoints |
-| Kleine, aggregierte Ergebnisdateien | Vollständige Vorhersagen und Logs |
-
-Die offiziellen Daten können Zugangs- oder Lizenzbedingungen unterliegen.
-Deshalb werden weder Daten noch das vollständige Starter-Kit in Git
-eingecheckt. Alle Teammitglieder laden sie über ihren autorisierten Zugang
-herunter.
-
-## Lokale Einrichtung
+Python **3.13** (Referenz: **3.13.13**), CPU ausreichend. Im Projektordner:
 
 ```powershell
-git clone https://github.com/jonaidaydi/semeval-2027-task9-framing.git
-cd semeval-2027-task9-framing
-
-py -3.11 -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-python -m pip install -e ".[dev]"
+py -3.13 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -e .
+.\.venv\Scripts\python.exe -m unittest discover -s tests -v
 ```
 
-Für Training und Evaluation zusätzlich:
+Die Paketversionen sind in [pyproject.toml](pyproject.toml) festgelegt.
+Die Tests benötigen keine Wettbewerbsdaten.
 
-```powershell
-python -m pip install -e ".[train]"
-```
+## Daten einrichten
 
-## Datenstruktur
+Aus dem [Files-Bereich der englischen Competition](https://artist.math.unipd.it/competitions/4/)
+einmal `full-data_2026_11_16` und `starting-kit-v2` herunterladen.
+Der Daten-Download hieß lokal `data-fourth-batch-russian-2026_11_1.zip`;
+verarbeitet wird ausschließlich Englisch.
 
-Beide offiziellen Trainings-Releases werden verwendet, aber nur lokal unter
-`data/raw/` abgelegt:
+Das Archiv so entpacken, dass folgende Pfade existieren:
 
 ```text
-data/
-└── raw/
-    ├── initial-training-data/
-    └── training-second-batch-oct/
+data/raw/release-2026-11-16/data/
+  2_training-second-batch-oct-revised/EN/
+    raw-documents/
+    subtask-1-annotations-with-paragraphs.txt
+  3_dev-set-nov-release/EN/
+    raw-documents/
+    subtask-1-annotations-for-subtask-2b-participant.txt
+    subtask-1-participant.txt
+third_party/official-starter-kit/v2/scorer-subtask-1.py
 ```
 
-Das erste Paket enthält teilweise ältere SemEval-2023-Daten. Diese gelten als
-optionale Zusatzdaten und sollten in Experimenten getrennt von den eigentlichen
-SemEval-2027-Daten ausgewiesen werden.
+Den Scorer aus dem Starter-Kit am angegebenen Ort ablegen.
+Andere Speicherorte lassen sich in [configs/november-2026-en.json](configs/november-2026-en.json)
+eintragen. Relative Eingabepfade beziehen sich auf den Projektordner.
 
-Das offizielle Starter-Kit wird lokal hier abgelegt:
-
-```text
-third_party/
-└── official-starter-kit/
-    ├── subtask1/
-    └── subtask2a_2b/
-```
-
-Weitere Hinweise stehen in [data/README.md](data/README.md) und
-[third_party/README.md](third_party/README.md).
-
-## Daten prüfen
-
-Der mitgelieferte Loader verarbeitet die speziellen Markierungen `-`,
-`No framing`, `None` und leere Labelfelder korrekt als **kein Frame**. Er
-bewahrt Dokument-ID und Zeichen-Offsets für spätere Submissions auf.
+## Ausführen
 
 ```powershell
-semeval-st1-summary data/raw
+.\.venv\Scripts\python.exe scripts\reproduce_november.py --show-inputs
+.\.venv\Scripts\python.exe scripts\reproduce_november.py
 ```
 
-Alternativ ohne Installation:
+Der zweite Befehl trainiert neu, prüft zwölf Ergebnisdateien gegen gespeicherte
+Referenzprüfsummen und erstellt die Visualisierung. Jeder Lauf erhält einen
+eigenen Ordner unter `outputs/run-…/`. Dort liegen `Ergebnisse.md`,
+`report.json`, `per_label.json`, `split.json`, Modell und lokale Vorhersagen.
+Es erfolgen keine Wettbewerbsabgaben.
 
-```powershell
-$env:PYTHONPATH = "src"
-python -m semeval_framing.cli data/raw
-```
+Danach **[Visualisierung-starten.cmd](Visualisierung-starten.cmd) doppelklicken**.
+Alternativ `visualisierung/index.html` direkt im Browser öffnen.
+Die fertige Seite funktioniert offline, mit Hell-/Dunkelmodus, vier Beispielen,
+Wortbeiträgen und einer Micro-/Macro-F1-Tabelle. Die Transformer-Ansicht ist
+ausdrücklich ein Schema; ein Transformer wurde noch nicht trainiert.
 
-## Tests
+Für absichtlich geänderte Daten `--config pfad/zur/config.json --new-experiment`
+verwenden. Dabei entfallen der Referenzvergleich und die auf die vier
+November-Beispiele zugeschnittene Visualisierung.
 
-```powershell
-python -m pytest
-```
+## Ergebnis
 
-Oder nur mit der Python-Standardbibliothek:
+Lokaler Holdout: **222 Absätze aus 20 Artikeln**.
 
-```powershell
-$env:PYTHONPATH = "src"
-python -m unittest discover -s tests -v
-```
+| Modell | Micro-F1 | Macro-F1 |
+|---|---:|---:|
+| Immer kein Frame | 0,2153 | 0,0280 |
+| TF-IDF, Hauptdaten, Schwelle 0,50 | 0,2153 | 0,0280 |
+| TF-IDF, mit Zusatzdaten, Schwelle 0,50 | 0,2153 | 0,0280 |
+| TF-IDF, Hauptdaten, gewichtet und abgestimmt | 0,3303 | 0,2409 |
+| TF-IDF, mit Zusatzdaten, gewichtet und abgestimmt | **0,3410** | **0,2632** |
 
-## Nächste technische Schritte
+- [Daten, Auswertung und Grenzen](docs/experiment.md)
+- [Referenzwerte und Prüfsummen](results/reference.json)
+- [Team-Workflow](docs/WORKFLOW.md)
 
-- [ ] Offizielle Daten lokal in die beschriebene Struktur kopieren
-- [ ] Datenstatistik für jede Sprache erzeugen und gemeinsam prüfen
-- [ ] Dokumentweisen Train-/Validation-Split implementieren
-- [ ] XLM-RoBERTa-Baseline auf Subtask 1 / Englisch reproduzieren
-- [ ] Submission-Writer und offiziellen Scorer integrieren
-- [ ] Ersten reproduzierbaren Experimentbericht anlegen
+## Code
 
-Arbeitsregeln und Branch-Konventionen stehen in
-[docs/WORKFLOW.md](docs/WORKFLOW.md).
+- `src/semeval_framing/november_experiment.py`: Goldlabels, Dokumentgruppen, Training, Auswertung.
+- `src/semeval_framing/baseline_tfidf.py`: TF-IDF, Klassifikatoren, F1, TSV-Ausgabe.
+- `src/semeval_framing/development.py`: ungelabelte Eingaben und Ausgabeprüfung.
+- `scripts/`: Trainingsstart und HTML-Export.
+- `visualisierung/framing-netz.template.html`: Oberfläche und Graph.
+- `tests/`: Daten-, Modell- und Browserprüfungen.
 
+Der zusätzliche Browsertest benötigt Node.js und Playwright mit Chromium.
+Nach lokalem `npm install --no-save --package-lock=false playwright@1.62.1` und
+`npx playwright install chromium`: `node tests/visualization-smoke.cjs`.
+Daten, Starter-Kit, Modelle, Ausgaben und die HTML-Seite mit Artikeltexten bleiben lokal.

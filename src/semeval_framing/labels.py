@@ -1,5 +1,3 @@
-"""Official framing taxonomy shared by both subtasks."""
-
 FRAME_LABELS = (
     "Economic",
     "Capacity_and_resources",

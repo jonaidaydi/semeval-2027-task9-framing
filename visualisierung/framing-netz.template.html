@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SemEval Task 9 | Wortbeiträge und Frames</title>
+</head>
+<body>
+<div id="framing-netz-1711">
+  <style>
+    :root { color-scheme:light; --foreground:#20252b; --background:#fff; --muted:#f1f3f5; --border:#e1e5e9; --viz-series-1:#2469a8; --viz-series-2:#a35b20; --viz-series-3:#7750aa; }
+    :root[data-theme="dark"] { color-scheme:dark; --foreground:#e8edf2; --background:#171a1e; --muted:#272d34; --border:#3a424b; --viz-series-1:#80bfff; --viz-series-2:#e7a267; --viz-series-3:#bca0e3; }
+    * { box-sizing:border-box; }
+    body { margin:0; padding:24px 16px; background:var(--background); color:var(--foreground); font:15px/1.5 system-ui,sans-serif; }
+    h2,h3,p { margin:0; }
+    h2 { font-size:24px; font-weight:600; line-height:1.25; }
+    h3 { font-size:18px; font-weight:600; }
+    .text-small { font-size:13px; }
+    .viz-controls { display:flex; flex-wrap:wrap; gap:16px; }
+    .form-label { display:grid; gap:6px; flex:1 1 240px; font-size:13px; }
+    .form-select { width:100%; min-width:0; padding:8px 10px; border:1px solid var(--border); border-radius:7px; background:var(--muted); color:var(--foreground); font:inherit; font-size:14px; }
+    .form-switch { display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer; }
+    input[type="checkbox"] { accent-color:var(--viz-series-1); width:17px; height:17px; }
+    button { cursor:pointer; }
+    .btn { border:1px solid var(--border); background:var(--muted); color:var(--foreground); padding:5px 10px; border-radius:7px; font:13px/1.4 system-ui,sans-serif; }
+    .btn-primary { background:var(--foreground); color:var(--background); padding:8px 12px; }
+    .btn[aria-pressed="true"] { background:var(--viz-series-1); color:var(--background); }
+    :focus-visible { outline:2px solid var(--viz-series-1); outline-offset:3px; }
+    hr { border:0; border-top:1px solid var(--border); margin:24px 0; }
+    .table { border-collapse:collapse; width:100%; font-size:14px; }
+    .table th,.table td { border-bottom:1px solid var(--border); padding:12px 0; text-align:left; vertical-align:top; font-weight:400; }
+    .table thead th { font-weight:600; }
+    .table .text-end { text-align:right; padding-left:16px; }
+    .text-nowrap { white-space:nowrap; }
+    .tabular-nums { font-variant-numeric:tabular-nums; }
+    @media (max-width:650px) { body { padding:16px; } h2 { font-size:21px; } .table { font-size:13px; } .table .text-end { padding-left:8px; } }
+
+    #framing-netz-1711 { max-width:1080px; margin:0 auto; padding:12px 0 32px; }
+    #framing-netz-1711 .page-heading { display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:24px; }
+    #framing-netz-1711 .eyebrow { margin-bottom:6px; }
+    #framing-netz-1711 .control-row { margin-bottom:12px; }
+    #framing-netz-1711 .context { display:grid; grid-template-columns:minmax(0,1.8fr) minmax(220px,1fr); gap:32px; margin:20px 0 24px; }
+    #framing-netz-1711 .context-label { font-weight:500; margin-bottom:8px; }
+    #framing-netz-1711 .comparison { display:grid; gap:12px; align-content:start; }
+    #framing-netz-1711 .comparison-label { display:block; margin-bottom:4px; }
+    #framing-netz-1711 .graph-header { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:16px; }
+    #framing-netz-1711 .graph-stage { max-width:960px; margin:0 auto; }
+    #framing-netz-1711 .evaluation { margin-top:32px; padding-top:24px; border-top:1px solid var(--border); }
+    #framing-netz-1711 .evaluation p { margin:8px 0 16px; }
+    #framing-netz-1711 .metric-meaning { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:16px; }
+    #framing-netz-1711 .metric-meaning p { margin:4px 0; }
+    #framing-netz-1711 .current-model { font-weight:500; }
+    #framing-netz-1711 .current-model-note { display:block; margin-top:4px; }
+    #framing-netz-1711 .evaluation-note { margin-top:16px; }
+    #framing-netz-1711 .meta-line { display:flex; flex-wrap:wrap; align-items:baseline; gap:4px 18px; }
+    #framing-netz-1711 .quiet { color:color-mix(in srgb,var(--foreground) 72%,transparent); font-weight:400; }
+    #framing-netz-1711 .method-name { display:grid; grid-template-columns:4rem 8rem minmax(0,1fr); gap:4px 18px; }
+    #framing-netz-1711 .method-primary { font-weight:500; }
+    @media (max-width:700px) {
+      #framing-netz-1711 .method-name { grid-template-columns:1fr; }
+    }
+    @media (max-width:650px) {
+      #framing-netz-1711 .context, #framing-netz-1711 .metric-meaning { grid-template-columns:1fr; gap:16px; }
+    }
+    #framing-netz-1711 .framing-svg { display:block; width:100%; overflow:visible; }
+    #framing-netz-1711 .framing-svg text { fill:var(--foreground); font-size:12px; }
+    #framing-netz-1711 .graph-heading { font-weight:500; }
+    #framing-netz-1711 .edge { fill:none; stroke:var(--border); }
+    #framing-netz-1711 .edge.positive { stroke:var(--viz-series-1); }
+    #framing-netz-1711 .edge.negative { stroke:var(--viz-series-2); stroke-dasharray:5 4; }
+    #framing-netz-1711 .edge.selected { stroke-width:3px; opacity:1; }
+    #framing-netz-1711 .edge.selected:not(.positive):not(.negative) { stroke:var(--viz-series-3); }
+    #framing-netz-1711 .node-mark { fill:color-mix(in srgb,var(--viz-series-1) 10%,transparent); stroke:var(--border); stroke-width:1px; }
+    #framing-netz-1711 .node-mark.rejected { fill:var(--muted); }
+    #framing-netz-1711 .node-mark.schema { fill:color-mix(in srgb,var(--viz-series-3) 9%,transparent); }
+    #framing-netz-1711 .flow-dot { fill:var(--viz-series-1); }
+    #framing-netz-1711 .flow-dot.negative { fill:var(--viz-series-2); }
+    #framing-netz-1711 .source-text { margin:0 0 12px; overflow-wrap:anywhere; }
+    #framing-netz-1711 .source-text mark { background:color-mix(in srgb,var(--viz-series-1) 22%,transparent); color:var(--foreground); }
+    #framing-netz-1711 .source-key { overflow-wrap:anywhere; }
+    #framing-netz-1711 .selected-detail { min-height:2.5em; overflow-wrap:anywhere; margin-top:12px; }
+    #framing-netz-1711 .legend { display:flex; flex-wrap:wrap; gap:8px 18px; }
+    #framing-netz-1711 .legend-item { display:inline-flex; gap:6px; align-items:center; }
+    #framing-netz-1711 .swatch { width:22px; height:0; border-top:2px solid var(--viz-series-1); }
+    #framing-netz-1711 .swatch.negative { border-color:var(--viz-series-2); border-top-style:dashed; }
+    #framing-netz-1711 .framing-svg foreignObject { overflow:visible; }
+    #framing-netz-1711 [hidden] { display:none !important; }
+  </style>
+  <header class="page-heading">
+    <div>
+      <div class="eyebrow meta-line text-small"><span>SemEval 2027</span> <span class="quiet">Task 9</span> <span class="quiet">Subtask 1</span> <span class="quiet">Englisch</span></div>
+      <h2>Vom Wort zur Frame-Entscheidung</h2>
+    </div>
+    <label class="form-check form-switch">
+      <input id="fg-theme" class="form-check-input" type="checkbox" role="switch">
+      <span class="form-check-label">Dunkelmodus</span>
+    </label>
+  </header>
+  <div class="viz-controls control-row">
+    <label class="form-label">Beispiel
+      <select id="fg-case" class="form-select">
+        <option value="2">Parlamentsvertrauen (Frame übersehen)</option>
+        <option value="0">Verpackung und Zölle (beide Frames erkannt)</option>
+        <option value="1">Regierungszustimmung (ein Frame übersehen)</option>
+        <option value="3">Vorrat an Verpackungen (zusätzliches Label)</option>
+      </select>
+    </label>
+    <label class="form-label">Ebene
+      <select id="fg-mode" class="form-select">
+        <option value="linear">TF-IDF (gemessene Wortbeiträge)</option>
+        <option value="semantic">Transformer-Kontext (nur Schema)</option>
+      </select>
+    </label>
+  </div>
+  <div class="context">
+    <div>
+      <div class="context-label">Der Absatz</div>
+      <div id="fg-source" class="source-text" lang="en"></div>
+      <div id="fg-source-key" class="source-key meta-line text-small"></div>
+    </div>
+    <div class="comparison">
+      <div><span class="comparison-label text-small">Goldlabels <span class="quiet">(vollständige Labelmenge)</span></span><div id="fg-gold"></div></div>
+      <div><span class="comparison-label text-small">Modellvorhersage <span class="quiet">(vollständige Labelmenge)</span></span><div id="fg-pred"></div></div>
+      <div id="fg-errors" class="meta-line text-small" aria-live="polite"></div>
+    </div>
+  </div>
+  <hr>
+  <div class="graph-header">
+    <h3>Eine Entscheidung im Detail</h3>
+    <button id="fg-play" class="btn btn-primary" type="button">Wortfluss abspielen</button>
+  </div>
+  <div class="viz-controls control-row">
+    <label id="fg-frame-control" class="form-label">Frame (einer von 14)
+      <select id="fg-frame" class="form-select"></select>
+    </label>
+  </div>
+  <div class="graph-stage">
+    <svg id="fg-graph" class="framing-svg" role="img" aria-labelledby="fg-title fg-desc"></svg>
+  </div>
+  <div id="fg-legend" class="legend text-small">
+    <span class="legend-item"><span class="swatch" aria-hidden="true"></span>+ erhöht den linearen Wert</span>
+    <span class="legend-item"><span class="swatch negative" aria-hidden="true"></span>− senkt den linearen Wert</span>
+  </div>
+  <div id="fg-detail" class="selected-detail meta-line text-small" aria-live="polite"></div>
+  <div id="fg-status" class="meta-line text-small"></div>
+  <section class="evaluation" aria-labelledby="fg-evaluation-title">
+    <h3 id="fg-evaluation-title">Wie gut ist das gesamte System?</h3>
+    <p id="fg-evaluation-scope" class="text-small"></p>
+    <table id="fg-metrics" class="table">
+      <thead><tr><th scope="col">Verfahren</th><th scope="col" class="text-end text-nowrap">Micro-F1</th><th scope="col" class="text-end text-nowrap">Macro-F1</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <div class="metric-meaning text-small">
+      <div><strong>Micro-F1</strong><p>Fasst richtige, zusätzliche und übersehene Labels über den gesamten Holdout zusammen. Häufige Klassen zählen stärker.</p></div>
+      <div><strong>Macro-F1</strong><p>Mittelt den F1 jeder Klasse. Alle 14 Frames und „None“ zählen gleich viel (auch seltene Klassen).</p></div>
+    </div>
+    <div class="evaluation-note text-small">F1 liegt zwischen 0 und 1 und ist keine Accuracy. Für den Transformer liegen noch keine Messwerte vor.</div>
+  </section>
+  <script id="fg-data" type="application/json">__GRAPH_DATA__</script>
+  <script>
+  (() => {
+    const root = document.getElementById('framing-netz-1711');
+    const find = id => root.querySelector('#' + id);
+    const data = JSON.parse(find('fg-data').textContent);
+    const svg = find('fg-graph');
+    const ns = 'http://www.w3.org/2000/svg';
+    const htmlNS = 'http://www.w3.org/1999/xhtml';
+    const friendly = {
+      Economic:'Economic', Capacity_and_resources:'Capacity / resources', Morality:'Morality',
+      Fairness_and_equality:'Fairness / equality', Legality_Constitutionality_and_jurisprudence:'Legality / constitution',
+      Policy_prescription_and_evaluation:'Policy / evaluation', Crime_and_punishment:'Crime / punishment',
+      Security_and_defense:'Security / defense', Health_and_safety:'Health / safety', Quality_of_life:'Quality of life',
+      Cultural_identity:'Cultural identity', Public_opinion:'Public opinion', Political:'Political',
+      External_regulation_and_reputation:'External regulation'
+    };
+    const contextWords = {
+      '2':['public','confidence','trust','respondents','distrust','parliament'],
+      '0':['costs','packaging','China','Trump','tariffs','goods'],
+      '1':['government','respondents','approval','disapproval','support','uncertain'],
+      '3':['bags','enough','order','July','packaging','4,000']
+    };
+    let state = {caseId:'2', mode:'linear', frame:'Public_opinion', selected:''};
+    let saved = {};
+    try { saved = JSON.parse(localStorage.getItem('framing-view') || '{}'); } catch {}
+    Object.assign(state, saved?.modelContent || saved || {});
+    const systemTheme = matchMedia('(prefers-color-scheme: dark)');
+    let theme = ['light','dark'].includes(saved?.privateContent?.theme) ? saved.privateContent.theme : null;
+    let terms = [], paths = [], buttons = [], width = 736;
+    let playing = false, timer = null, animation = null, dot = null;
+    let lastWidth = 0;
+    const number = (n, places=3) => Number(n).toLocaleString('de-DE',{minimumFractionDigits:places,maximumFractionDigits:places});
+    const signed = n => (n >= 0 ? '+' : '−') + number(Math.abs(n));
+    const current = () => data.cases.find(c => c.id === state.caseId) || data.cases[0];
+    const frame = () => current().frames.find(f => f.label === state.frame) || current().frames[0];
+    const labels = values => values.length ? values.map(x => friendly[x] || x).join(', ') : 'kein Frame';
+    function applyTheme() {
+      const active = theme || (systemTheme.matches ? 'dark' : 'light');
+      document.documentElement.style.colorScheme = active;
+      document.documentElement.dataset.theme = active;
+      find('fg-theme').checked = active === 'dark';
+    }
+    function save() {
+      try { localStorage.setItem('framing-view', JSON.stringify({modelContent:state,privateContent:{theme}})); } catch {}
+    }
+    function setParts(container, parts) {
+      container.replaceChildren();
+      parts.filter(Boolean).forEach((part,index) => {
+        if (index) container.appendChild(document.createTextNode(' '));
+        const span = document.createElement('span');
+        span.textContent = part;
+        if (index) span.className = 'quiet';
+        container.appendChild(span);
+      });
+    }
+    function renderEvaluation() {
+      const evaluation = data.evaluation;
+      const tbody = find('fg-metrics').querySelector('tbody');
+      for (const result of evaluation.rows) {
+        const tr = document.createElement('tr');
+        tr.dataset.model = result.id;
+        const name = document.createElement('th');
+        name.scope = 'row';
+        if (result.details.length) {
+          const method = document.createElement('div');
+          method.className = 'method-name';
+          setParts(method, [result.name, ...result.details]);
+          method.firstElementChild.className = 'method-primary';
+          name.appendChild(method);
+        } else name.textContent = result.name;
+        if (result.id === evaluation.active_model) {
+          tr.className = 'current-model';
+          const note = document.createElement('span');
+          note.className = 'current-model-note quiet text-small';
+          note.textContent = 'Modell der TF-IDF-Ansicht oben.';
+          name.appendChild(note);
+        }
+        tr.appendChild(name);
+        for (const key of ['micro_f1','macro_f1']) {
+          const td = document.createElement('td');
+          td.className = 'text-end text-nowrap tabular-nums'; td.textContent = number(result[key],4);
+          tr.appendChild(td);
+        }
+        tbody.appendChild(tr);
+      }
+      find('fg-evaluation-scope').textContent = evaluation.paragraphs+' Absätze aus '+evaluation.documents+' zurückgehaltenen Artikeln. Derselbe Holdout für alle Varianten. Die Auswahl oben verändert diese Gesamtwerte nicht.';
+    }
+    function element(tag, attrs={}, text, parent=svg) {
+      const node = document.createElementNS(ns,tag);
+      for (const [key,value] of Object.entries(attrs)) node.setAttribute(key,String(value));
+      if (text !== undefined) node.textContent = text;
+      parent.appendChild(node); return node;
+    }
+    function textAt(x,y,text,attrs={}) { return element('text',{x,y,...attrs},text); }
+    function centerText(x,y,lines) {
+      lines.forEach((line,i) => textAt(x,y+i*19,line,{'text-anchor':'middle'}));
+    }
+    function renderText(word='') {
+      const output = find('fg-source');
+      output.replaceChildren();
+      const tokens = current().text.split(/([\p{L}\p{N}_]+)/u);
+      for (const token of tokens) {
+        if (word && token.toLowerCase() === word.toLowerCase()) {
+          const mark = document.createElement('mark'); mark.textContent = token; output.appendChild(mark);
+        } else output.appendChild(document.createTextNode(token));
+      }
+    }
+    function stop() {
+      playing = false; clearTimeout(timer); cancelAnimationFrame(animation);
+      dot?.remove(); dot = null; find('fg-play').textContent = 'Wortfluss abspielen';
+    }
+    function highlight(index, persist=true) {
+      const term = terms[index]; if (!term) return;
+      state.selected = term.word;
+      buttons.forEach((button,i) => button.setAttribute('aria-pressed',String(i===index)));
+      paths.forEach((path,i) => path.classList.toggle('selected',i===index));
+      renderText(term.kind === 'word' ? term.word : '');
+      setParts(find('fg-detail'), state.mode === 'semantic'
+        ? [term.word, 'Kontextbezug schematisch (keine gemessene Attention)']
+        : term.kind === 'word'
+          ? [term.word, 'TF-IDF '+number(term.tfidf), 'Gewicht '+signed(term.weight), 'Beitrag '+signed(term.contribution)]
+          : [term.word, 'Beitrag zum linearen Wert '+signed(term.contribution)]);
+      if (persist) save();
+    }
+    function pulse(index) {
+      cancelAnimationFrame(animation); dot?.remove();
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const path = paths[index]; if (!path) return;
+      dot = element('circle',{r:5,class:'flow-dot' + (terms[index].contribution < 0 ? ' negative' : ''),'aria-hidden':'true'});
+      const total = path.getTotalLength(), start = performance.now();
+      const step = now => {
+        const t = Math.min(1,(now-start)/430), point = path.getPointAtLength(total*t);
+        if (!dot) return; dot.setAttribute('cx',point.x); dot.setAttribute('cy',point.y);
+        if (t < 1) animation = requestAnimationFrame(step); else { dot.remove(); dot=null; }
+      };
+      animation = requestAnimationFrame(step);
+    }
+    function play() {
+      if (playing) { stop(); return; }
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) { highlight(0); return; }
+      playing = true; find('fg-play').textContent = 'Anhalten';
+      let index = 0;
+      const next = () => {
+        if (!playing) return;
+        highlight(index,false); pulse(index); index++;
+        if (index < terms.length) timer = setTimeout(next,610);
+        else timer = setTimeout(() => { stop(); save(); },610);
+      };
+      next();
+    }
+    function normalizeState() {
+      if (!data.cases.some(c => c.id === state.caseId)) state.caseId = '2';
+      if (!data.labels.includes(state.frame)) state.frame = 'Public_opinion';
+      if (!['linear','semantic'].includes(state.mode)) state.mode = 'linear';
+      find('fg-case').value = state.caseId; find('fg-mode').value = state.mode; find('fg-frame').value = state.frame;
+    }
+    function draw() {
+      stop(); normalizeState();
+      width = svg.getBoundingClientRect().width || 736;
+      const mobile = width < 560, semantic = state.mode === 'semantic';
+      const c = current(), f = frame();
+      const n = mobile ? 6 : 8;
+      if (semantic) {
+        const available = new Set(c.text.toLowerCase().match(/[\p{L}\p{N}_]+/gu) || []);
+        const words = contextWords[c.id].filter(w => available.has(w.toLowerCase()));
+        for (const candidate of [...f.terms].sort((a,b)=>b.tfidf-a.tfidf)) {
+          if (words.length >= 6) break;
+          if (!words.some(w=>w.toLowerCase()===candidate.word)) words.push(candidate.word);
+        }
+        terms = words.map(word => ({word,kind:'word',contribution:0}));
+      } else {
+        const ordered = [...f.terms].sort((a,b)=>Math.abs(b.contribution)-Math.abs(a.contribution));
+        terms = ordered.slice(0,n).map(t=>({...t,kind:'word'}));
+        const rest = ordered.slice(n);
+        if (rest.length) terms.push({word:'Rest ('+rest.length+')',contribution:rest.reduce((sum,t)=>sum+t.contribution,0),kind:'rest'});
+        terms.push({word:'Basiswert',contribution:f.bias,kind:'bias'});
+      }
+      paths=[]; buttons=[]; svg.replaceChildren();
+      element('title',{id:'fg-title'},semantic ? 'Transformer-Kontext als Schema' : 'Wortbeiträge für '+f.label);
+      element('desc',{id:'fg-desc'},semantic ? 'Illustrative Wortverbindungen führen zu einer kontextabhängigen Darstellung und zu 14 noch nicht berechneten Frame-Werten.' : 'Die angezeigten Wortbeiträge einschließlich Rest und Basiswert ergeben die Bewertung '+number(f.probability)+'. Die Entscheidungsschwelle beträgt 0,45.');
+      const rows = Math.ceil(terms.length/2);
+      const rowStep = matchMedia('(pointer: coarse)').matches ? 46 : 36;
+      const center = mobile ? {x:width/2,y:rows*66+123} : {x:width*0.57,y:Math.max(165,60+(terms.length-1)*rowStep/2)};
+      const output = mobile ? {x:width/2,y:center.y+153} : {x:width-70,y:center.y};
+      const height = mobile ? output.y+65 : Math.max(center.y+100,terms.length*rowStep+60);
+      svg.setAttribute('viewBox','0 0 '+width+' '+height); svg.setAttribute('height',height);
+      const maxContrib = Math.max(...terms.map(t=>Math.abs(t.contribution)),0.01);
+      const wordPositions = terms.map((term,i) => mobile
+        ? {x:(i%2)*(width/2)+5,y:29+Math.floor(i/2)*66,w:width/2-10}
+        : {x:8,y:44+i*rowStep,w:132});
+      const heading = semantic ? 'Wörter im Kontext' : 'Wortbeiträge';
+      textAt(8,16,heading,{class:'graph-heading'});
+      if (!mobile) {
+        textAt(center.x,16,semantic?'Kontext':'Modellwert',{'text-anchor':'middle',class:'graph-heading'});
+        textAt(output.x,16,'Entscheidung',{'text-anchor':'middle',class:'graph-heading'});
+      }
+      if (semantic) {
+        wordPositions.slice(0,-1).forEach((pos,i) => {
+          const other = wordPositions[i+1];
+          const x=pos.x+pos.w/2, y=pos.y+16, x2=other.x+other.w/2,y2=other.y+16;
+          element('path',{d:`M${x},${y} Q${Math.max(x,x2)+26},${(y+y2)/2} ${x2},${y2}`,class:'edge',opacity:0.5});
+        });
+      }
+      wordPositions.forEach((pos,i) => {
+        const start = mobile ? {x:pos.x+pos.w/2,y:pos.y+49} : {x:200,y:pos.y+16};
+        const end = mobile ? {x:center.x,y:center.y-65} : {x:center.x-66,y:center.y};
+        const d = mobile
+          ? `M${start.x},${start.y} C${start.x},${end.y-28} ${end.x},${end.y-28} ${end.x},${end.y}`
+          : `M${start.x},${start.y} C${start.x+65},${start.y} ${end.x-45},${end.y} ${end.x},${end.y}`;
+        const term=terms[i];
+        const cls = semantic ? 'edge' : 'edge '+(term.contribution>=0?'positive':'negative');
+        const path = element('path',{d,class:cls,opacity:0.35,'stroke-width':semantic?1.5:1+2*Math.abs(term.contribution)/maxContrib});
+        paths.push(path);
+      });
+      const outPath = mobile ? `M${center.x},${center.y+66} L${output.x},${output.y-42}` : `M${center.x+66},${center.y} L${output.x-56},${output.y}`;
+      element('path',{d:outPath,class:'edge','stroke-width':1.5});
+      element('circle',{cx:center.x,cy:center.y,r:66,class:'node-mark'+(semantic?' schema':'')});
+      if (semantic) {
+        centerText(center.x,center.y-18,['Kontext-Encoder','Vektoren','nur Schema']);
+      } else {
+        const lines = friendly[f.label].includes(' / ') ? friendly[f.label].split(' / ') : [friendly[f.label]];
+        if (mobile) {
+          centerText(center.x,center.y-(lines.length+1)*9,[...lines,'Wert '+number(f.probability),'Linear '+signed(f.logit)]);
+        } else {
+          centerText(center.x,center.y-98,lines);
+          centerText(center.x,center.y-17,['Modellwert',number(f.probability)]);
+          textAt(center.x,center.y+28,'Linear: '+signed(f.logit),{'text-anchor':'middle'});
+        }
+      }
+      const pass = f.probability >= data.threshold;
+      element('rect',{x:output.x-56,y:output.y-41,width:112,height:82,rx:10,class:'node-mark'+(semantic?' schema':pass?'':' rejected')});
+      centerText(output.x,output.y-13,semantic?['14 Frames','Ergebnis offen']:pass?['Frame','ausgegeben']:['Frame','nicht ausgegeben']);
+      if (!semantic) textAt(output.x,output.y+62,'Schwelle '+number(data.threshold,2),{'text-anchor':'middle'});
+      wordPositions.forEach((pos,i) => {
+        const term=terms[i];
+        const foreign = element('foreignObject',{x:pos.x,y:pos.y,width:pos.w,height:38});
+        const button = document.createElementNS(htmlNS,'button');
+        button.setAttribute('type','button'); button.setAttribute('class','btn');
+        button.setAttribute('aria-pressed','false'); button.textContent=term.word;
+        button.setAttribute('aria-label',term.word+(semantic?' (schematischer Kontext)': ' (Beitrag '+signed(term.contribution)+')'));
+        button.addEventListener('click',()=>{stop(); highlight(i); pulse(i);});
+        foreign.appendChild(button); buttons.push(button);
+        if (semantic || mobile) {
+          const b=button.getBoundingClientRect(), s=svg.getBoundingClientRect();
+          const x=b.right-s.left+4, y=b.top-s.top+b.height/2;
+          if (mobile) {
+            const gutter=pos.x+pos.w-3, endY=center.y-66;
+            paths[i].setAttribute('d',`M${x},${y} L${gutter},${y} C${gutter},${endY-28} ${center.x},${endY-28} ${center.x},${endY}`);
+          } else {
+            paths[i].setAttribute('d',`M${x},${y} C${x+70},${y} ${center.x-111},${center.y} ${center.x-66},${center.y}`);
+          }
+        }
+        if (!semantic) textAt(mobile?pos.x+5:146,mobile?pos.y+50:pos.y+20,signed(term.contribution));
+      });
+      find('fg-frame-control').hidden = semantic; find('fg-legend').hidden = semantic;
+      setParts(find('fg-source-key'), [c.document, 'Zeichen '+c.begin+' bis '+c.end, 'Holdout']);
+      setParts(find('fg-status'), semantic ? ['Nur Architektur-Schema', 'kein Transformer trainiert', 'keine gemessenen Kontextkanten'] : ['Rekonstruktion geprüft: 222/222 Holdout-Vorhersagen identisch', 'Kanten: Beiträge zum linearen Wert']);
+      find('fg-gold').textContent = labels(c.gold);
+      find('fg-pred').textContent = semantic ? 'Transformer: noch nicht berechnet' : labels(c.predicted);
+      const missed = c.gold.filter(x=>!c.predicted.includes(x));
+      const extra = c.predicted.filter(x=>!c.gold.includes(x));
+      setParts(find('fg-errors'), semantic ? [] : missed.length || extra.length
+        ? [missed.length?'Übersehen: '+labels(missed):'', extra.length?'Zusätzlich: '+labels(extra):'', !c.predicted.length && c.gold.length?'None fälschlich ausgegeben':'']
+        : ['Gold und Vorhersage stimmen überein.']);
+      const selectedIndex=terms.findIndex(t=>t.word===state.selected);
+      highlight(selectedIndex<0?0:selectedIndex,false);
+    }
+    for (const label of data.labels) {
+      const option=document.createElement('option'); option.value=label; option.textContent=friendly[label] || label; find('fg-frame').appendChild(option);
+    }
+    find('fg-theme').addEventListener('change',event=>{theme=event.target.checked?'dark':'light'; applyTheme(); save();});
+    systemTheme.addEventListener('change',()=>{if (!theme) applyTheme();});
+    find('fg-play').addEventListener('click',play);
+    find('fg-case').addEventListener('change',event=>{
+      state.caseId=event.target.value; state.frame=current().gold[0] || current().predicted[0] || 'Public_opinion'; state.selected=''; draw(); save();
+    });
+    find('fg-mode').addEventListener('change',event=>{state.mode=event.target.value; state.selected=''; draw(); save();});
+    find('fg-frame').addEventListener('change',event=>{state.frame=event.target.value; state.selected=''; draw(); save();});
+    new ResizeObserver(entries=>{
+      const next=entries[0].contentRect.width;
+      if (Math.abs(next-lastWidth)>1) { lastWidth=next; draw(); }
+    }).observe(root);
+    applyTheme(); renderEvaluation(); draw();
+  })();
+  </script>
+</div>
+</body>
+</html>

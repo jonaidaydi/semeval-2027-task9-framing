@@ -1,0 +1,22 @@
+{
+  "release": "data-fourth-batch-russian-2026_11_1.zip (downloaded 2026-11-16)",
+  "output": "outputs/november-2026-en-v1",
+  "main": {
+    "annotations": "data/raw/release-2026-11-16/data/2_training-second-batch-oct-revised/EN/subtask-1-annotations-with-paragraphs.txt",
+    "articles": "data/raw/release-2026-11-16/data/2_training-second-batch-oct-revised/EN/raw-documents",
+    "with_paragraphs": true,
+    "use_provided_paragraph_text": true
+  },
+  "auxiliary": [
+    {
+      "annotations": "data/raw/release-2026-11-16/data/3_dev-set-nov-release/EN/subtask-1-annotations-for-subtask-2b-participant.txt",
+      "articles": "data/raw/release-2026-11-16/data/3_dev-set-nov-release/EN/raw-documents",
+      "auxiliary_text_gold": true
+    }
+  ],
+  "development": {
+    "participants": "data/raw/release-2026-11-16/data/3_dev-set-nov-release/EN/subtask-1-participant.txt",
+    "articles": "data/raw/release-2026-11-16/data/3_dev-set-nov-release/EN/raw-documents"
+  },
+  "scorer": "third_party/official-starter-kit/v2/scorer-subtask-1.py"
+}
