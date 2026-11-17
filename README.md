@@ -5,6 +5,27 @@ Klassifikatoren. Ein Absatz kann mehrere Frames oder keinen Frame erhalten.
 
 ## Installieren und testen
 
+### 1. Repository holen und Branch auswählen
+
+In PowerShell im gewünschten übergeordneten Ordner ausführen:
+
+```powershell
+git clone --branch eval/november-development https://github.com/jonaidaydi/semeval-2027-task9-framing.git
+cd semeval-2027-task9-framing
+```
+
+Falls das Repository bereits geklont wurde, stattdessen im Projektordner:
+
+```powershell
+git fetch origin
+git switch eval/november-development
+```
+
+Mit `git branch --show-current` prüfen: Die Ausgabe muss
+`eval/november-development` sein.
+
+### 2. Python-Umgebung installieren und testen
+
 Python **3.13** (Referenz: **3.13.13**), CPU ausreichend. Im Projektordner:
 
 ```powershell
