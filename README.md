@@ -26,10 +26,11 @@ Mit `git branch --show-current` prüfen: Die Ausgabe muss
 
 ### 2. Python-Umgebung installieren und testen
 
-Python **3.13** (Referenz: **3.13.13**), CPU ausreichend. Im Projektordner:
+Python **3.13** (Referenz: **3.13.13**), CPU ausreichend.
+Im Projektordner jeden Befehl einzeln eingeben und mit Enter ausführen:
 
 ```powershell
-py -3.13 -m venv .venv
+py.exe -3.13 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -e .
 .\.venv\Scripts\python.exe -m unittest discover -s tests -v
 ```
