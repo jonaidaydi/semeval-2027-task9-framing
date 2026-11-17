@@ -19,8 +19,12 @@
     .viz-controls { display:flex; flex-wrap:wrap; gap:16px; }
     .form-label { display:grid; gap:6px; flex:1 1 240px; font-size:13px; }
     .form-select { width:100%; min-width:0; padding:8px 10px; border:1px solid var(--border); border-radius:7px; background:var(--muted); color:var(--foreground); font:inherit; font-size:14px; }
-    .form-switch { display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer; }
-    input[type="checkbox"] { accent-color:var(--viz-series-1); width:17px; height:17px; }
+    .form-switch { display:flex; align-items:center; gap:8px; min-height:32px; font-size:13px; cursor:pointer; }
+    .form-switch input { appearance:none; position:relative; flex:0 0 34px; width:34px; height:20px; margin:0; border:0; border-radius:999px; background:var(--border); cursor:pointer; transition:background .18s ease; }
+    .form-switch input::before { content:""; position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%; background:#fff; box-shadow:0 1px 3px #0002; transition:transform .18s ease; }
+    .form-switch input:checked { background:var(--viz-series-1); }
+    .form-switch input:checked::before { transform:translateX(14px); }
+    @media (prefers-reduced-motion:reduce) { .form-switch input,.form-switch input::before { transition:none; } }
     button { cursor:pointer; }
     .btn { border:1px solid var(--border); background:var(--muted); color:var(--foreground); padding:5px 10px; border-radius:7px; font:13px/1.4 system-ui,sans-serif; }
     .btn-primary { background:var(--foreground); color:var(--background); padding:8px 12px; }
