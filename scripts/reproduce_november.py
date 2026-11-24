@@ -1,5 +1,6 @@
 import argparse
 from datetime import datetime, timezone
+import hashlib
 from importlib import metadata
 import json
 import os
@@ -12,7 +13,7 @@ import uuid
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from semeval_framing.november_experiment import run, save_json, sha256
+from semeval_framing.november_experiment import run, save_json
 from export_visualization import export_visualization
 from prepare_data import prepare, SetupError
 
@@ -39,12 +40,17 @@ def show_inputs(config):
 
 def check_reference(output, report):
     reference = json.loads((ROOT / "results/reference.json").read_text(encoding="utf-8"))
-    files = {name: sha256(output / name) == expected
-             for name, expected in reference["files_sha256"].items()}
+    files = {}
+    for name, expected in reference["files_sha256"].items():
+        content = (output / name).read_bytes()
+        if Path(name).suffix == ".json":
+            content = content.replace(b"\r\n", b"\n")
+        files[name] = hashlib.sha256(content).hexdigest() == expected
     fields = {key: report[key] == reference[key]
               for key in ("statistics", "metrics", "scorer_sha256")}
     return {"passed": all(files.values()) and all(fields.values()),
             "files": files, "report_fields": fields,
+            "comparison": "JSON: LF-normalisierte Zeilenenden; TSV/TXT: bytegenau",
             "python": platform.python_version(), "reference_python": reference["versions"]["python"]}
 
 
@@ -109,7 +115,7 @@ def main():
         export_visualization(output)
     (ROOT / "outputs/latest-run.txt").write_text(output.relative_to(ROOT).as_posix(), encoding="utf-8")
     print(f"\nErgebnisblatt: {output / 'Ergebnisse.md'}")
-    print("Referenzvergleich: " + ("12/12 Dateien identisch" if check else "neues Experiment"))
+    print("Referenzvergleich: " + ("12/12 Dateien stimmen ueberein (JSON-Zeilenenden normalisiert)" if check else "neues Experiment"))
     if not args.new_experiment:
         print("Visualisierung: projekt.py anzeigen mit Python 3.13 ausfuehren")
 

@@ -53,7 +53,7 @@ def sha256(path):
 
 def save_json(path, value):
     Path(path).write_text(
-        json.dumps(value, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+        json.dumps(value, indent=2, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n"
     )
 
 

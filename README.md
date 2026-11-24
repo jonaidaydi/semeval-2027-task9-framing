@@ -105,8 +105,10 @@ alle Tests ausgeführt. Vorhandene identische Daten werden wiederverwendet;
 abweichende Versionen werden gemeldet und nicht überschrieben.
 
 `trainieren` prüft die Daten erneut, trainiert die Baseline, wertet lokal aus und
-erstellt die Visualisierung. Erwartet werden **12/12 identische Referenzdateien**
+erstellt die Visualisierung. Erwartet werden **12/12 übereinstimmende Referenzdateien**
 und für die abgestimmte Variante **Micro-F1 0,3410 / Macro-F1 0,2632**.
+Beim JSON-Vergleich werden Windows- und macOS-Zeilenenden vereinheitlicht.
+Alle übrigen Inhalte sowie TSV-/TXT-Vorhersagen werden weiterhin bytegenau geprüft.
 
 `anzeigen` erzeugt die HTML-Seite aus dem letzten erfolgreichen Lauf neu und
 öffnet sie im Browser. Damit werden auch Änderungen am Layout übernommen.
@@ -144,7 +146,8 @@ Downloads, vorbereitete Daten, Modelle und Ergebnisse werden von Git ignoriert.
 | Python 3.13 fehlt / Befehl nicht gefunden | Python 3.13 installieren oder eine vorhandene Python-3.13-Umgebung aktivieren. |
 | Codabench-Dateien fehlen | Beide vollständigen Downloads in `data` ablegen und `einrichten` wiederholen. |
 | Unterschiedliche Versionen | Die genannten Dateien prüfen; nur die zusammengehörigen November-Daten und das Starter-Kit v2 verwenden. |
-| Noch kein Trainingslauf vorhanden | Erst `trainieren`, dann `anzeigen` ausführen. |
+| Noch kein erfolgreich geprüfter Trainingslauf vorhanden | Erst `trainieren`, dann `anzeigen` ausführen. Bei einem Referenzfehler die Fehlermeldung prüfen. |
+| Referenzfehler nur bei JSON-Dateien mit einem älteren Repository-Stand | `git pull --ff-only` im November-Branch ausführen und das Training erneut starten. Die Prüfung berücksichtigt jetzt unterschiedliche Zeilenenden. |
 | `No module named semeval_framing` bei manuellen Befehlen | `projekt.py einrichten` ausführen; danach die oben beschriebenen Startbefehle verwenden. |
 
 Bei einem Fehler den vollständigen Befehl und die vollständige Fehlermeldung teilen.

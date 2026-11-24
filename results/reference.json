@@ -171,17 +171,18 @@
   },
   "scorer_sha256": "e2bddcb8eaa2496796f880ac47a68d98b0be93a3ae56ed8400a98eeca14742ad",
   "files_sha256": {
-    "split.json": "a17b3306b4bc2c5a3fe214d733526685ac593ffb2ad7505f30dcde1605b7050a",
+    "split.json": "3954d5d08cbe9521fc7228c94fb00b3a698b3494c1fc9c9a7bb42189a6f620bc",
     "validation_gold.tsv": "d2aa75b8ee7a186172c060feb964623331fbcde283bc54ac4afe073a2db3e9be",
     "no_frame_validation.tsv": "d675b3e66de36e8353083f10ee3298f974cd6223d9a753e86b67f3da4a7e569e",
     "tfidf_core_050_validation.tsv": "d675b3e66de36e8353083f10ee3298f974cd6223d9a753e86b67f3da4a7e569e",
     "tfidf_all_050_validation.tsv": "d675b3e66de36e8353083f10ee3298f974cd6223d9a753e86b67f3da4a7e569e",
     "tfidf_core_tuned_validation.tsv": "ddfaa342788d2c82dc0c955d3b14d49197a8ce2f6743556eebb2014e8098f3e0",
     "tfidf_tuned_validation.tsv": "30787aa2c5007e5fd8e544124d049be6f647cc232dfdd67d1e98b32269b89316",
-    "core_inner_tuning.json": "5e9b5bf7e4487d0811ccdba6e2c51da4038ba76730017f6906a9c65082e1b06e",
-    "inner_tuning.json": "fc567ea6548fadbc1572677ee0534966c90d48905d3d406ffab5204d4af9dcf2",
-    "full_training_tuning.json": "44cb0fc14a6ee61e14520a35160646252d1dffa8121d1632d925622d3651ac77",
-    "per_label.json": "14ecf482f265563d704198b000fd967d2dd5f6e449b90825fb109b75d3621c29",
+    "core_inner_tuning.json": "cf2f5911e5e14f3e48f51f739898abad6045a7e1d3364a93b1c5a81edd91fcd5",
+    "inner_tuning.json": "40f49c26e838086acac282556a514c4b07afdedc0dd7194e1bb98b90602197d1",
+    "full_training_tuning.json": "5ad565f0b4512efaf0ee222e902f1a74e61a894444936449bb2f5cae12df4c19",
+    "per_label.json": "11c7c59cd59013af7e0385166665b02cf06adc06e671a13391a3a3ad3ed08207",
     "subtask_1_best_prediction.txt": "904a61a4ee78bd53cffe8b80dc1fc301db20b5e319b2e3009e97cdb0b22bea85"
-  }
+  },
+  "json_line_endings": "LF"
 }

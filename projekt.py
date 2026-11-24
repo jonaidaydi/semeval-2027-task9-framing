@@ -52,7 +52,8 @@ def main():
             execute([python, ROOT / "scripts/reproduce_november.py"])
         elif args.aktion == "anzeigen":
             if not (ROOT / "outputs/latest-run.txt").is_file():
-                raise SetupError("Noch kein Trainingslauf vorhanden. Zuerst projekt.py trainieren ausfuehren.")
+                raise SetupError("Noch kein erfolgreich gepruefter Trainingslauf vorhanden. "
+                                 "Zuerst projekt.py trainieren ausfuehren; bei einem Referenzfehler dessen Meldung pruefen.")
             execute([python, ROOT / "scripts/export_visualization.py"])
             page = ROOT / "visualisierung/index.html"
             if not webbrowser.open(page.as_uri()):
