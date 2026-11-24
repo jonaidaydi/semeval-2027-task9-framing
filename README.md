@@ -89,6 +89,15 @@ Nach erfolgreichem Training die Visualisierung öffnen:
 python3.13 projekt.py anzeigen
 ```
 
+Alternativ auf **[Visualisierung-starten.command](Visualisierung-starten.command)**
+doppelklicken. Die Datei verwendet automatisch die eingerichtete Projektumgebung.
+Bei einem Git-Clone ist sie bereits ausführbar. Falls beim Download als ZIP die
+Ausführungsrechte fehlen, einmal im Projektordner ausführen:
+
+```bash
+chmod +x Visualisierung-starten.command
+```
+
 Bei einer bereits aktivierten Conda-Umgebung mit Python 3.13 kann in diesen
 Befehlen `python` statt `python3.13` verwendet werden. Mit `python --version`
 prüfen. Das Projekt richtet trotzdem seine eigene `.venv` ein und verwendet sie automatisch.
