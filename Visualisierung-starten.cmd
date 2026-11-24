@@ -1,18 +1,15 @@
 @echo off
 setlocal
 cd /d "%~dp0"
-if exist "%~dp0visualisierung\index.html" goto open
 if not exist "%~dp0.venv\Scripts\python.exe" goto missing_python
-"%~dp0.venv\Scripts\python.exe" "%~dp0scripts\export_visualization.py"
+"%~dp0.venv\Scripts\python.exe" "%~dp0projekt.py" anzeigen
 if errorlevel 1 goto failed
-:open
-start "" "%~dp0visualisierung\index.html"
 exit /b 0
 :missing_python
-echo Bitte zuerst gemaess README.md installieren und die Baseline ausfuehren.
+echo Bitte zuerst im Projektordner: py.exe -3.13 projekt.py einrichten
 pause
 exit /b 1
 :failed
-echo Der Export konnte nicht abgeschlossen werden. Hinweise stehen oben.
+echo Die Visualisierung konnte nicht geoeffnet werden. Hinweise stehen oben.
 pause
 exit /b 1

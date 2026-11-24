@@ -14,7 +14,8 @@ node_modules/
 .vscode/
 .DS_Store
 Thumbs.db
-/data/
+/data/*
+!/data/README.md
 /third_party/
 /Subtask 1 - Text_en/
 /outputs/

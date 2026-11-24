@@ -14,6 +14,7 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from semeval_framing.november_experiment import run, save_json, sha256
 from export_visualization import export_visualization
+from prepare_data import prepare, SetupError
 
 
 def show_inputs(config):
@@ -73,6 +74,11 @@ def main():
     args = parser.parse_args()
     config_path = args.config.resolve()
     os.chdir(ROOT)
+    if config_path == (ROOT / "configs/november-2026-en.json").resolve():
+        try:
+            prepare(ROOT)
+        except (SetupError, OSError, UnicodeError) as error:
+            parser.error(str(error))
     config = json.loads(config_path.read_text(encoding="utf-8-sig"))
     missing = show_inputs(config)
     if missing:
@@ -105,7 +111,7 @@ def main():
     print(f"\nErgebnisblatt: {output / 'Ergebnisse.md'}")
     print("Referenzvergleich: " + ("12/12 Dateien identisch" if check else "neues Experiment"))
     if not args.new_experiment:
-        print("Visualisierung: Visualisierung-starten.cmd doppelklicken")
+        print("Visualisierung: projekt.py anzeigen mit Python 3.13 ausfuehren")
 
 
 if __name__ == "__main__":
